@@ -1,14 +1,16 @@
 import { Options as PrettierOptions } from "prettier";
 
+export { PrettierOptions };
+
 /**
  * Transform TypeScript code into vanilla JavaScript without affecting the formatting
  * @param code            Source coude
- * @param filename        File name for the source (useful for distinguishing between .ts and .tsx)
+ * @param fileName        File name for the source (useful for distinguishing between .ts and .tsx)
  * @param prettierOptions Options to pass to prettier
  */
 export function transform(
 	code: string,
-	filename: string,
+	fileName: string,
 	prettierOptions?: PrettierOptions | null | undefined,
 ): Promise<string>;
 
