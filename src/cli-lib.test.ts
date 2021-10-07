@@ -132,8 +132,12 @@ describe("CLI", () => {
 		await cli("input-dir", "output/dir");
 
 		expect(mkdir).toHaveBeenCalledWith("output/dir", { recursive: true });
-		expect(mkdir).toHaveBeenCalledWith("output/dir/nested");
-		expect(mkdir).toHaveBeenCalledWith("output/dir/nested/deep");
+		expect(mkdir).toHaveBeenCalledWith("output/dir/nested", {
+			recursive: true,
+		});
+		expect(mkdir).toHaveBeenCalledWith("output/dir/nested/deep", {
+			recursive: true,
+		});
 
 		expect(transformFile).toHaveBeenCalledWith(
 			"input-dir/one.ts",

@@ -2,6 +2,9 @@ import { transformAsync } from "@babel/core";
 import type { VisitNodeObject, Node } from "@babel/traverse";
 import { format, Options as PrettierOptions } from "prettier";
 
+// @ts-expect-error: No typinggs needed
+import babelTs from "@babel/preset-typescript";
+
 export async function transform(
 	code: string,
 	filename: string,
@@ -41,7 +44,7 @@ export async function transform(
 				},
 			},
 		],
-		presets: ["@babel/preset-typescript"],
+		presets: [babelTs],
 		generatorOpts: {
 			shouldPrintComment: (comment) => comment !== "@detype: remove-me",
 		},
