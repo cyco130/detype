@@ -30,6 +30,7 @@
 			}
 		}
 	},
+	"ignorePatterns": "tes-files/**/*",
 	"rules": {
 		"no-only-tests/no-only-tests": "error"
 	}

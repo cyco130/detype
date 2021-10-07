@@ -12,7 +12,8 @@ async function run() {
 
 	await esbuild.build({
 		logLevel: "info",
-		entryPoints: ["src/index.ts"],
+		entryPoints: ["src/index.ts", "src/cli.ts"],
+		bundle: true,
 		outdir: "dist",
 		platform: "node",
 		target: ["node12"],

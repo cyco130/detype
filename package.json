@@ -1,7 +1,9 @@
 {
 	"name": "detype",
-	"version": "0.1.0-next.0",
+	"version": "0.1.0",
 	"description": "Removes TypeScript type annotations but keeps the formatting",
+	"main": "dist/index.js",
+	"bin": "detype.js",
 	"scripts": {
 		"prepublishOnly": "pnpm build",
 		"build": "node build.mjs",
@@ -11,8 +13,17 @@
 		"lint": "eslint src --max-warnings 0",
 		"format": "prettier . --write"
 	},
-	"main": "dist/index.js",
+	"files": [
+		"dist/**/*"
+	],
+	"dependencies": {
+		"@babel/core": "^7.15.8",
+		"@babel/preset-typescript": "^7.15.0",
+		"fast-glob": "^3.2.7",
+		"prettier": "^2.4.1"
+	},
 	"devDependencies": {
+		"@babel/traverse": "^7.15.4",
 		"@types/jest": "^27.0.2",
 		"@typescript-eslint/eslint-plugin": "^4.33.0",
 		"@typescript-eslint/parser": "^4.33.0",
@@ -28,7 +39,6 @@
 		"eslint-plugin-ssr-friendly": "^1.0.5",
 		"jest": "^27.2.4",
 		"npm-run-all": "^4.1.5",
-		"prettier": "^2.4.1",
 		"rimraf": "^3.0.2",
 		"typescript": "^4.4.3"
 	},

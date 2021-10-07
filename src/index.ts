@@ -1,3 +1,1 @@
-export function hello(): string {
-	return "world";
-}
+export { transform } from "./transform";

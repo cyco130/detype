@@ -1,6 +1,5 @@
 {
 	"quoteProps": "preserve",
 	"trailingComma": "all",
-	"useTabs": true,
-	"trailingCommaPHP": "php5"
+	"useTabs": true
 }
