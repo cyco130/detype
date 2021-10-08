@@ -1,8 +1,8 @@
 # detype
 
-> Remove types, keep formatting
+> Remove the types, keep the formatting
 
-**detype** is a command line tool to remove type annotations and other TypeScript specific syntax constructs and output vanilla JavaScript **without altering the source formatting** too much.
+**detype** is a command line tool to remove type annotations and other TypeScript specific syntax constructs and output vanilla JavaScript **without altering the source formatting** too much. It supports `.ts`, `.tsx`, as well as `.vue` extensions.
 
 In other words, it turns this:
 
@@ -39,7 +39,9 @@ export function bar(foo) {
 }
 ```
 
-One possible use case is generating vanilla JavaScript code samples from TypeScript, removing the need to maintain two separate versions of what is essentially the same code.
+It achieves this using [Babel](https://babeljs.io/), [Babel's TypeScript preset](https://babeljs.io/docs/en/babel-preset-typescript), a small custom Babel plugin to remove comments attached to TypeScript-only constructs, and [Prettier](https://prettier.io/). The output is very close to hand-written JavaScript, especially if you were already using Prettier for formatting.
+
+**One possible use case** is the following: Suppose you have a library that you want to provide usage examples for. Automatically generating vanilla JavaScript samples from TypeScript samples using `detype` would remove the burden of maintaining two separate versions of what is essentially the same code.
 
 ## CLI Usage
 
@@ -70,3 +72,13 @@ function transformFile(
 	outputFileName: string,
 ): Promise<void>;
 ```
+
+## Change log
+## 0.2.0
+- Add support for Vue single file components
+
+## 0.1.0
+- Initial release
+
+## Credits
+Fatih Aygün, under MIT License

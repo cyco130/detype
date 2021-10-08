@@ -18,7 +18,7 @@ export async function cli(input: string, output?: string): Promise<boolean> {
 			return false;
 		}
 
-		const files = (await glob(path.join(input, "**/*.{ts,tsx}"))).filter(
+		const files = (await glob(path.join(input, "**/*.{ts,tsx,vue}"))).filter(
 			(file) => !file.endsWith(".d.ts"),
 		);
 		const dirs = [...new Set(files.map((file) => path.dirname(file)))].sort();
@@ -76,6 +76,8 @@ function inferName(input: string, outputDir?: string) {
 		output = path.join(outputDir ?? dir, name + ".js");
 	} else if (ext === ".tsx") {
 		output = path.join(outputDir ?? dir, name + ".jsx");
+	} else if (ext === ".vue") {
+		output = path.join(outputDir ?? dir, name + ".vue");
 	} else {
 		throw new Error(`Unknwon file extension ${input}`);
 	}

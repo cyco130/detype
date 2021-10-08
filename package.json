@@ -1,6 +1,6 @@
 {
 	"name": "detype",
-	"version": "0.1.0",
+	"version": "0.2.0-canary.0",
 	"description": "Removes TypeScript type annotations but keeps the formatting",
 	"main": "dist/index.js",
 	"bin": "detype.js",
@@ -20,7 +20,8 @@
 		"@babel/core": "^7.15.8",
 		"@babel/preset-typescript": "^7.15.0",
 		"fast-glob": "^3.2.7",
-		"prettier": "^2.4.1"
+		"prettier": "^2.4.1",
+		"vue-template-compiler": "^2.6.14"
 	},
 	"devDependencies": {
 		"@babel/traverse": "^7.15.4",

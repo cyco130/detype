@@ -125,8 +125,8 @@ describe("CLI", () => {
 
 		glob.mockResolvedValue([
 			"input-dir/one.ts",
-			"input-dir/nested/deep/three.ts",
 			"input-dir/nested/two.tsx",
+			"input-dir/nested/deep/three.vue",
 		]);
 
 		await cli("input-dir", "output/dir");
@@ -148,8 +148,8 @@ describe("CLI", () => {
 			"output/dir/nested/two.jsx",
 		);
 		expect(transformFile).toHaveBeenCalledWith(
-			"input-dir/nested/deep/three.ts",
-			"output/dir/nested/deep/three.js",
+			"input-dir/nested/deep/three.vue",
+			"output/dir/nested/deep/three.vue",
 		);
 	});
 });

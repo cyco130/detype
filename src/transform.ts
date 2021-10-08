@@ -1,15 +1,31 @@
 import { transformAsync } from "@babel/core";
 import type { VisitNodeObject, Node } from "@babel/traverse";
 import { format, Options as PrettierOptions } from "prettier";
+import {
+	parseComponent as parseVueComponent,
+	SFCDescriptor as ParsedVue,
+} from "vue-template-compiler";
 
 // @ts-expect-error: No typinggs needed
 import babelTs from "@babel/preset-typescript";
 
 export async function transform(
 	code: string,
-	filename: string,
+	fileName: string,
 	prettierOptions?: PrettierOptions | null,
 ): Promise<string> {
+	const originalCode = code;
+	const originalFileName = fileName;
+
+	let parsedVue: ParsedVue | undefined;
+
+	if (fileName.endsWith(".vue")) {
+		parsedVue = parseVueComponent(code);
+		if (!parsedVue.script || parsedVue.script.lang !== "ts") return code;
+		code = parsedVue.script.content;
+		fileName = fileName + ".ts";
+	}
+
 	// Babel visitor to remove leading comments
 	const removeComments: VisitNodeObject<unknown, Node> = {
 		enter(p) {
@@ -29,7 +45,7 @@ export async function transform(
 	};
 
 	const babelOutput = await transformAsync(code, {
-		filename,
+		filename: fileName,
 		retainLines: true,
 		plugins: [
 			// Plugin to remove leading comments attached to TypeScript-only constructs
@@ -58,9 +74,28 @@ export async function transform(
 		throw new Error("Babel error");
 	}
 
-	const prettierOutput = format(babelOutput.code, {
+	code = babelOutput.code;
+
+	if (parsedVue) {
+		let before = originalCode.slice(0, parsedVue.script!.start);
+		const suffix = originalCode.slice(parsedVue.script!.end);
+
+		// We have to backtrack to remove lang="ts", not fool-proof but should work for all reasonable code
+		const matches = before.match(/\blang\s*=\s*["']ts["']/);
+		if (matches) {
+			const lastMatch = matches[matches.length - 1];
+			const lastMatchIndex = before.lastIndexOf(lastMatch);
+			before =
+				before.slice(0, lastMatchIndex) +
+				before.slice(lastMatchIndex + lastMatch.length);
+		}
+
+		code = before + code + suffix;
+	}
+
+	const prettierOutput = format(code, {
 		...prettierOptions,
-		filepath: filename,
+		filepath: originalFileName,
 	});
 
 	return prettierOutput;
