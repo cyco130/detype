@@ -1,5 +1,8 @@
 <template>
-  <p>Hello world!</p>
+  <div>
+    <p>Hello {{ someConst }}!</p>
+    <MyComponent v-bind:prop="someConst" v-custom:[someConst]="otherConst" />
+  </div>
 </template>
 
 <style scoped>
@@ -8,7 +11,13 @@ p {
 }
 </style>
 
+<script lang="ts">
+console.log("This is the non-setup script");
+</script>
+
 <script lang="ts" setup>
+import MyComponent from "MyComponent.vue";
+import { someConst, otherConst } from "some-module";
 import type { ParsedPath } from "path";
 
 let x: string;
