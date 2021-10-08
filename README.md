@@ -2,6 +2,10 @@
 
 > Remove the types, keep the formatting
 
+```sh
+npm i -g detype
+```
+
 **detype** is a command line tool to remove type annotations and other TypeScript specific syntax constructs and output vanilla JavaScript **without altering the source formatting** too much. It supports `.ts`, `.tsx`, as well as `.vue` extensions.
 
 In other words, it turns this:
