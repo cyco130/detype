@@ -1,6 +1,6 @@
 {
 	"name": "detype",
-	"version": "0.2.0-canary.1",
+	"version": "0.2.0",
 	"description": "Removes TypeScript type annotations but keeps the formatting",
 	"main": "dist/index.js",
 	"bin": "detype.js",
@@ -50,7 +50,9 @@
 	},
 	"keywords": [
 		"typescript",
-		"formatting"
+		"formatting",
+		"vue",
+		"sfc"
 	],
 	"author": "Fatih Aygün <cyco130@gmail.com>",
 	"license": "MIT",

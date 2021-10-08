@@ -39,7 +39,7 @@ export function bar(foo) {
 }
 ```
 
-It achieves this using [Babel](https://babeljs.io/), [Babel's TypeScript preset](https://babeljs.io/docs/en/babel-preset-typescript), a small custom Babel plugin to remove comments attached to TypeScript-only constructs, and [Prettier](https://prettier.io/). The output is very close to hand-written JavaScript, especially if you were already using Prettier for formatting.
+It achieves this using [Babel](https://babeljs.io/), [Babel's TypeScript preset](https://babeljs.io/docs/en/babel-preset-typescript), a small custom Babel plugin to remove comments attached to TypeScript-only constructs, and [Prettier](https://prettier.io/). For Vue files, it uses the tools from the [VueDX project](https://github.com/vuedx/languagetools) The output is very close to hand-written JavaScript, especially if you were already using Prettier for formatting.
 
 **One possible use case** is the following: Suppose you have a library that you want to provide usage examples for. Automatically generating vanilla JavaScript samples from TypeScript samples using `detype` would remove the burden of maintaining two separate versions of what is essentially the same code.
 
