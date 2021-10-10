@@ -1,2 +1,2 @@
-export { transform } from "./transform";
+export { transform, removeMagicComments } from "./transform";
 export { transformFile } from "./transformFile";

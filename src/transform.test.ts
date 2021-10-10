@@ -1,9 +1,13 @@
-import { transform } from "./transform";
+import {
+	transform,
+	processMagicComments,
+	removeMagicComments,
+} from "./transform";
 import fs from "fs";
 import path from "path";
 
 describe("transform function", () => {
-	it("transforms TypeScript file", async () => {
+	it.only("transforms TypeScript file", async () => {
 		const input = await fs.promises.readFile(
 			path.resolve(__dirname, "../test-files/input.ts"),
 			"utf-8",
@@ -33,5 +37,17 @@ describe("transform function", () => {
 		const output = await transform(input, "input.vue");
 
 		expect(output).toBe(expected);
+	});
+
+	it("processes magic comments", async () => {
+		const input = `// @detype: replace\nconsole.log("Hello from TypeScript");\n// @detype: with\n// console.log("Hello from JavaScript");\n// @detype: end\n`;
+		const output = processMagicComments(input);
+		expect(output.trim()).toBe(`console.log("Hello from JavaScript");`);
+	});
+
+	it("removes comments", async () => {
+		const input = `// @detype: replace\nconsole.log("Hello from TypeScript");\n// @detype: with\n// console.log("Hello from JavaScript");\n// @detype: end\n`;
+		const output = removeMagicComments(input);
+		expect(output).toBe(`console.log("Hello from TypeScript");\n`);
 	});
 });

@@ -1,12 +1,13 @@
 {
 	"name": "detype",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "Removes TypeScript type annotations but keeps the formatting",
 	"main": "dist/index.js",
 	"bin": "detype.js",
 	"scripts": {
 		"prepublishOnly": "pnpm build",
 		"build": "node build.mjs",
+		"watch": "node build.mjs --watch",
 		"check": "run-p lint typecheck test",
 		"test": "jest",
 		"typecheck": "tsc -p tsconfig.json --noEmit",
@@ -14,7 +15,8 @@
 		"format": "prettier . --write"
 	},
 	"files": [
-		"dist/**/*"
+		"dist/**/*",
+		"inddex.d.ts"
 	],
 	"dependencies": {
 		"@babel/core": "^7.15.8",

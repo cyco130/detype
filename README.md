@@ -79,7 +79,12 @@ function transformFile(
 
 ## Change log
 ## 0.2.0
-- Add support for Vue single file components
+- feat: Magic comments
+- feat: Expose type declarations
+- fix: Better empty line handling
+
+## 0.2.0
+- feat: for Vue single file components
 
 ## 0.1.0
 - Initial release

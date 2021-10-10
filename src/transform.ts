@@ -12,10 +12,10 @@ import {
 	isComponentNode as isVueComponentNode,
 } from "@vuedx/template-ast-types";
 
-type VueElementNode = VueSfcTemplateBlock["ast"];
-
 // @ts-expect-error: No typinggs needed
 import babelTs from "@babel/preset-typescript";
+
+type VueElementNode = VueSfcTemplateBlock["ast"];
 
 export async function transform(
 	code: string,
@@ -64,15 +64,18 @@ export async function transform(
 		code = await removeTypes(code, fileName);
 	}
 
-	const prettierOutput = format(code, {
+	code = format(code, {
 		...prettierOptions,
 		filepath: originalFileName,
 	});
 
-	return prettierOutput;
+	return code;
 }
 
 async function removeTypes(code: string, fileName: string) {
+	code = code.replaceAll(/\n\n+/g, "\n/* @detype: empty-line */\n");
+	code = processMagicComments(code);
+
 	// Babel visitor to remove leading comments
 	const removeComments: VisitNodeObject<unknown, Node> = {
 		enter(p) {
@@ -81,7 +84,10 @@ async function removeTypes(code: string, fileName: string) {
 			for (let i = p.node.leadingComments.length - 1; i >= 0; i--) {
 				const comment = p.node.leadingComments[i];
 
-				if (code.slice(comment.end).match(/^\s*\n\s*\n/)) {
+				if (
+					code.slice(comment.end).match(/^\s*\n\s*\n/) ||
+					comment.value.includes("@detype: empty-line")
+				) {
 					// There is at least one empty line between the comment and the TypeScript specific construct
 					// We should keep this comment and those before it
 					break;
@@ -106,7 +112,7 @@ async function removeTypes(code: string, fileName: string) {
 					TSImportType: removeComments,
 				},
 			},
-		],
+		].filter(Boolean),
 		presets: [babelTs],
 		generatorOpts: {
 			shouldPrintComment: (comment) => comment !== "@detype: remove-me",
@@ -121,7 +127,9 @@ async function removeTypes(code: string, fileName: string) {
 		throw new Error("Babel error");
 	}
 
-	return babelOutput.code;
+	return babelOutput.code
+		.replaceAll(/\n\n*/g, "\n")
+		.replaceAll("/* @detype: empty-line */", "\n\n");
 }
 
 async function removeTypesFromVueSfcScript(
@@ -179,4 +187,61 @@ async function removeTypesFromVueSfcScript(
 	}
 
 	return before + scriptCode + after;
+}
+
+export function processMagicComments(input: string): string {
+	const REPLACE_COMMENT = "// @detype: replace\n";
+	const WITH_COMMENT = "// @detype: with\n";
+	const END_COMMENT = "// @detype: end\n";
+
+	let start = input.indexOf(REPLACE_COMMENT);
+
+	while (start >= 0) {
+		const middle = input.indexOf(WITH_COMMENT, start);
+		if (middle < 0) return input;
+		const middleEnd = middle + WITH_COMMENT.length;
+
+		const end = input.indexOf(END_COMMENT, middleEnd);
+		if (end < 0) return input;
+		const endEnd = end + END_COMMENT.length;
+
+		const before = input.slice(0, start);
+		const newText = input.slice(middleEnd, end).replaceAll(/^\s*\/\//gm, "");
+		const after = input.slice(endEnd);
+
+		input = before + newText + after;
+
+		start = input.indexOf(REPLACE_COMMENT, before.length + newText.length);
+	}
+
+	return input;
+}
+
+export function removeMagicComments(input: string): string {
+	const REPLACE_COMMENT = "// @detype: replace\n";
+	const WITH_COMMENT = "// @detype: with\n";
+	const END_COMMENT = "// @detype: end\n";
+
+	let start = input.indexOf(REPLACE_COMMENT);
+	const startEnd = start + REPLACE_COMMENT.length;
+
+	while (start >= 0) {
+		const middle = input.indexOf(WITH_COMMENT, start);
+		if (middle < 0) return input;
+		const middleEnd = middle + WITH_COMMENT.length;
+
+		const end = input.indexOf(END_COMMENT, middleEnd);
+		if (end < 0) return input;
+		const endEnd = end + END_COMMENT.length;
+
+		const before = input.slice(0, start);
+		const keptText = input.slice(startEnd, middle);
+		const after = input.slice(endEnd);
+
+		input = before + keptText + after;
+
+		start = input.indexOf(REPLACE_COMMENT, before.length + keptText.length);
+	}
+
+	return input;
 }

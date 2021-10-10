@@ -23,3 +23,9 @@ export function transformFile(
 	inputFileName: string,
 	outputFileName: string,
 ): Promise<void>;
+
+/**
+ * Removes magic comments without performing the TS to JS transform
+ * @param input
+ */
+export function removeMagicComments(input: string): string;

@@ -11,6 +11,21 @@ interface Foo {
   bar: number;
 }
 
+// @detype: replace
+// These two lines will be removed
+console.log("Hello from TypeScript");
+// @detype: with
+// // Notice the double comments!
+// console.log("Hello from JavaScript");
+// @detype: end
+
+// @detype: replace
+// These two lines will be removed
+console.log("Hello from TypeScript 2");
+// @detype: with
+// console.log("Hello from JavaScript 2");
+// @detype: end
+
 // This comment should also be kept
 export function bar(foo: Foo): Date {
   return new Date();
