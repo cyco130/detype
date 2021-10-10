@@ -223,7 +223,7 @@ export function removeMagicComments(input: string): string {
 	const END_COMMENT = "// @detype: end\n";
 
 	let start = input.indexOf(REPLACE_COMMENT);
-	const startEnd = start + REPLACE_COMMENT.length;
+	let startEnd = start + REPLACE_COMMENT.length;
 
 	while (start >= 0) {
 		const middle = input.indexOf(WITH_COMMENT, start);
@@ -241,6 +241,7 @@ export function removeMagicComments(input: string): string {
 		input = before + keptText + after;
 
 		start = input.indexOf(REPLACE_COMMENT, before.length + keptText.length);
+		startEnd = start + REPLACE_COMMENT.length;
 	}
 
 	return input;

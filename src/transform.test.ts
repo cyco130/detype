@@ -7,7 +7,7 @@ import fs from "fs";
 import path from "path";
 
 describe("transform function", () => {
-	it.only("transforms TypeScript file", async () => {
+	it("transforms TypeScript file", async () => {
 		const input = await fs.promises.readFile(
 			path.resolve(__dirname, "../test-files/input.ts"),
 			"utf-8",
@@ -45,9 +45,19 @@ describe("transform function", () => {
 		expect(output.trim()).toBe(`console.log("Hello from JavaScript");`);
 	});
 
-	it("removes comments", async () => {
-		const input = `// @detype: replace\nconsole.log("Hello from TypeScript");\n// @detype: with\n// console.log("Hello from JavaScript");\n// @detype: end\n`;
+	it("removes magic comments", async () => {
+		const input = await fs.promises.readFile(
+			path.resolve(__dirname, "../test-files/input.ts"),
+			"utf-8",
+		);
+
+		const expected = await fs.promises.readFile(
+			path.resolve(__dirname, "../test-files/expected.ts"),
+			"utf-8",
+		);
+
 		const output = removeMagicComments(input);
-		expect(output).toBe(`console.log("Hello from TypeScript");\n`);
+
+		expect(output).toBe(expected);
 	});
 });

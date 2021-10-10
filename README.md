@@ -6,7 +6,7 @@
 npm i -g detype
 ```
 
-**detype** is a command line tool to remove type annotations and other TypeScript specific syntax constructs and output vanilla JavaScript **without altering the source formatting** too much. It supports `.ts`, `.tsx`, as well as `.vue` extensions.
+**detype** is a command line tool and library to remove type annotations and other TypeScript specific syntax constructs and output vanilla JavaScript **without altering the source formatting** too much. It supports `.ts`, `.tsx`, as well as `.vue` extensions.
 
 In other words, it turns this:
 
@@ -78,15 +78,15 @@ function transformFile(
 ```
 
 ## Change log
-## 0.2.0
+## 0.3
 - feat: Magic comments
 - feat: Expose type declarations
 - fix: Better empty line handling
 
-## 0.2.0
+## 0.2
 - feat: for Vue single file components
 
-## 0.1.0
+## 0.1
 - Initial release
 
 ## Credits
