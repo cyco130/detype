@@ -47,6 +47,14 @@ It achieves this using [Babel](https://babeljs.io/), [Babel's TypeScript preset]
 
 **One possible use case** is the following: Suppose you have a library that you want to provide usage examples for. Automatically generating vanilla JavaScript samples from TypeScript samples using `detype` would remove the burden of maintaining two separate versions of what is essentially the same code.
 
+## Installation
+
+```sh
+npm install detype
+```
+
+`detype` requires Node version 14.18.0 or later.
+
 ## CLI Usage
 
 ```sh

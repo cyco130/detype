@@ -15,6 +15,11 @@ import {
 // @ts-expect-error: No typinggs needed
 import babelTs from "@babel/preset-typescript";
 
+// Needed for Node 14
+// @ts-expect-error: No typinggs
+import { shim } from "string.prototype.replaceall";
+shim();
+
 type VueElementNode = VueSfcTemplateBlock["ast"];
 
 export async function transform(
