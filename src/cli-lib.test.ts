@@ -1,13 +1,25 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { cli } from "./cli-lib";
 
-jest.mock("fs/promises");
+jest.mock("fs", () => {
+	// Partial mock to make Babel happy
+	const fs = jest.requireActual("fs");
+
+	return {
+		...fs,
+		promises: {
+			...fs.promises,
+			stat: jest.fn(),
+			mkdir: jest.fn(),
+		},
+	};
+});
 jest.mock("./transformFile");
 jest.mock("fast-glob");
 
 describe("CLI", () => {
 	it("honors input file and output file", async () => {
-		const { stat, mkdir } = require("fs/promises") as Record<string, jest.Mock>;
+		const { stat, mkdir } = require("fs").promises as Record<string, jest.Mock>;
 		const { transformFile } = require("./transformFile") as Record<
 			string,
 			jest.Mock
@@ -35,7 +47,7 @@ describe("CLI", () => {
 	});
 
 	it("infers output file name .js", async () => {
-		const { stat } = require("fs/promises") as Record<string, jest.Mock>;
+		const { stat } = require("fs").promises as Record<string, jest.Mock>;
 		const { transformFile } = require("./transformFile") as Record<
 			string,
 			jest.Mock
@@ -54,7 +66,7 @@ describe("CLI", () => {
 	});
 
 	it("infers output file name .jsx", async () => {
-		const { stat } = require("fs/promises") as Record<string, jest.Mock>;
+		const { stat } = require("fs").promises as Record<string, jest.Mock>;
 		const { transformFile } = require("./transformFile") as Record<
 			string,
 			jest.Mock
@@ -73,7 +85,7 @@ describe("CLI", () => {
 	});
 
 	it("infers output file name from directory", async () => {
-		const { stat, mkdir } = require("fs/promises") as Record<string, jest.Mock>;
+		const { stat, mkdir } = require("fs").promises as Record<string, jest.Mock>;
 		const { transformFile } = require("./transformFile") as Record<
 			string,
 			jest.Mock
@@ -107,7 +119,7 @@ describe("CLI", () => {
 	});
 
 	it("walks the file system", async () => {
-		const { stat, mkdir } = require("fs/promises") as Record<string, jest.Mock>;
+		const { stat, mkdir } = require("fs").promises as Record<string, jest.Mock>;
 		const { transformFile } = require("./transformFile") as Record<
 			string,
 			jest.Mock

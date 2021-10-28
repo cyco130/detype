@@ -1,6 +1,8 @@
-import { readFile, writeFile } from "fs/promises";
+import fs from "fs";
 import { transform } from "./transform";
 import { resolveConfig } from "prettier";
+
+const { readFile, writeFile } = fs.promises;
 
 export async function transformFile(
 	inputFileName: string,

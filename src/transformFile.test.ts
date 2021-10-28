@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { transformFile } from "./transformFile";
 
-jest.mock("fs/promises", () => ({
-	readFile: jest.fn().mockResolvedValue("some text"),
-	writeFile: jest.fn(),
+jest.mock("fs", () => ({
+	promises: {
+		readFile: jest.fn().mockResolvedValue("some text"),
+		writeFile: jest.fn(),
+	},
 }));
 
 jest.mock("prettier", () => ({
@@ -16,7 +18,7 @@ jest.mock("./transform", () => ({
 
 describe("transformFile function", () => {
 	it("transforms file", async () => {
-		const { readFile, writeFile } = require("fs/promises");
+		const { readFile, writeFile } = require("fs").promises;
 		const { resolveConfig } = require("prettier");
 		const { transform } = require("./transform");
 

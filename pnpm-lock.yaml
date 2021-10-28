@@ -5,6 +5,7 @@ specifiers:
   '@babel/preset-typescript': ^7.15.0
   '@babel/traverse': ^7.15.4
   '@types/jest': ^27.0.2
+  '@types/node': 12.12.6
   '@typescript-eslint/eslint-plugin': ^4.33.0
   '@typescript-eslint/parser': ^4.33.0
   '@vuedx/compiler-sfc': ^0.7.1
@@ -38,6 +39,7 @@ dependencies:
 devDependencies:
   '@babel/traverse': 7.15.4
   '@types/jest': 27.0.2
+  '@types/node': 12.12.6
   '@typescript-eslint/eslint-plugin': 4.33.0_d753869925cce96d3eb2141eeedafe57
   '@typescript-eslint/parser': 4.33.0_eslint@7.32.0+typescript@4.4.3
   esbuild: 0.13.4
@@ -827,6 +829,10 @@ packages:
 
   /@types/json5/0.0.29:
     resolution: {integrity: sha1-7ihweulOEdK4J7y+UnC86n8+ce4=}
+    dev: true
+
+  /@types/node/12.12.6:
+    resolution: {integrity: sha512-FjsYUPzEJdGXjwKqSpE0/9QEh6kzhTAeObA54rn6j3rR4C/mzpI9L0KNfoeASSPMMdxIsoJuCLDWcM/rVjIsSA==}
     dev: true
 
   /@types/node/16.10.3:

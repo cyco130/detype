@@ -2,7 +2,7 @@
 	"compilerOptions": {
 		"strict": true,
 		"module": "ES2020",
-		"lib": ["ES2021"],
+		"lib": ["ES2020", "ES2021.String"],
 		"esModuleInterop": true,
 		"target": "es6",
 		"moduleResolution": "node",

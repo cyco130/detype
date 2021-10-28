@@ -53,7 +53,7 @@ It achieves this using [Babel](https://babeljs.io/), [Babel's TypeScript preset]
 npm install detype
 ```
 
-`detype` requires Node version 14.18.0 or later.
+`detype` requires Node version 12.22.7 or later.
 
 ## CLI Usage
 

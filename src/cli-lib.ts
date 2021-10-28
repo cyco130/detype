@@ -1,7 +1,9 @@
-import { stat, mkdir } from "fs/promises";
+import fs from "fs";
 import path from "path";
 import { transformFile } from "./transformFile";
 import glob from "fast-glob";
+
+const { stat, mkdir } = fs.promises;
 
 export async function cli(input: string, output?: string): Promise<boolean> {
 	if (!input) {
