@@ -222,32 +222,41 @@ export function processMagicComments(input: string): string {
 	return input;
 }
 
-export function removeMagicComments(input: string): string {
+export function removeMagicComments(
+	code: string,
+	fileName: string,
+	prettierOptions?: PrettierOptions | null,
+): string {
 	const REPLACE_COMMENT = "// @detype: replace\n";
 	const WITH_COMMENT = "// @detype: with\n";
 	const END_COMMENT = "// @detype: end\n";
 
-	let start = input.indexOf(REPLACE_COMMENT);
+	let start = code.indexOf(REPLACE_COMMENT);
 	let startEnd = start + REPLACE_COMMENT.length;
 
 	while (start >= 0) {
-		const middle = input.indexOf(WITH_COMMENT, start);
-		if (middle < 0) return input;
+		const middle = code.indexOf(WITH_COMMENT, start);
+		if (middle < 0) return code;
 		const middleEnd = middle + WITH_COMMENT.length;
 
-		const end = input.indexOf(END_COMMENT, middleEnd);
-		if (end < 0) return input;
+		const end = code.indexOf(END_COMMENT, middleEnd);
+		if (end < 0) return code;
 		const endEnd = end + END_COMMENT.length;
 
-		const before = input.slice(0, start);
-		const keptText = input.slice(startEnd, middle);
-		const after = input.slice(endEnd);
+		const before = code.slice(0, start);
+		const keptText = code.slice(startEnd, middle);
+		const after = code.slice(endEnd);
 
-		input = before + keptText + after;
+		code = before + keptText + after;
 
-		start = input.indexOf(REPLACE_COMMENT, before.length + keptText.length);
+		start = code.indexOf(REPLACE_COMMENT, before.length + keptText.length);
 		startEnd = start + REPLACE_COMMENT.length;
 	}
 
-	return input;
+	code = format(code, {
+		...prettierOptions,
+		filepath: fileName,
+	});
+
+	return code;
 }

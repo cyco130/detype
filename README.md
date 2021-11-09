@@ -116,7 +116,7 @@ detype [-h | --help]
 function transform(
   // Source code
   code: string,
-  // File name for the source (useful for distinguishing between .ts and .tsx)
+  // File name for the source
   fileName: string,
   // Options to pass to prettier
   prettierOptions?: PrettierOptions | null,
@@ -129,7 +129,14 @@ function transformFile(
 ): Promise<void>;
 
 // Remove magic comments without performing the TS to JS transform
-export function removeMagicComments(input: string): string;
+export function removeMagicComments(
+  // Source code
+  code: string,
+  // File name for the source
+  fileName: string,
+  // Options to pass to prettier
+  prettierOptions?: PrettierOptions | null,
+): string;
 
 // Remove magic comments from the input file and write the output to another file
 export function removeMagicCommentsFromFile(

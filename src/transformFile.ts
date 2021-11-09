@@ -19,6 +19,7 @@ export async function removeMagicCommentsFromFile(
 	outputFileName: string,
 ): Promise<void> {
 	const code = await readFile(inputFileName, "utf-8");
-	const output = await removeMagicComments(code);
+	const prettierConfig = await resolveConfig(inputFileName);
+	const output = await removeMagicComments(code, inputFileName, prettierConfig);
 	await writeFile(outputFileName, output, "utf-8");
 }

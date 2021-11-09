@@ -5,7 +5,7 @@ export { PrettierOptions };
 /**
  * Transform TypeScript code into vanilla JavaScript without affecting the formatting
  * @param code            Source coude
- * @param fileName        File name for the source (useful for distinguishing between .ts and .tsx)
+ * @param fileName        File name for the source
  * @param prettierOptions Options to pass to prettier
  */
 export function transform(
@@ -26,9 +26,15 @@ export function transformFile(
 
 /**
  * Removes magic comments without performing the TS to JS transform
- * @param input
+ * @param code            Source coude
+ * @param fileName        File name for the source
+ * @param prettierOptions Options to pass to prettier
  */
-export function removeMagicComments(input: string): string;
+export function removeMagicComments(
+	code: string,
+	fileName: string,
+	prettierOptions?: PrettierOptions | null,
+): string;
 
 /**
  * Remove magic comments from the input file and write the output to another file
