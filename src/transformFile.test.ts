@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { transformFile } from "./transformFile";
+import { removeMagicCommentsFromFile, transformFile } from "./transformFile";
 
 jest.mock("fs", () => ({
 	promises: {
@@ -14,6 +14,9 @@ jest.mock("prettier", () => ({
 
 jest.mock("./transform", () => ({
 	transform: jest.fn().mockResolvedValue("transformed text"),
+	removeMagicComments: jest
+		.fn()
+		.mockResolvedValue("text with magic comments removed"),
 }));
 
 describe("transformFile function", () => {
@@ -37,6 +40,28 @@ describe("transformFile function", () => {
 		expect(writeFile).toHaveBeenCalledWith(
 			"output.js",
 			"transformed text",
+			"utf-8",
+		);
+	});
+});
+
+describe("removeMagicCommentsFromFile function", () => {
+	it("removes magic comments", async () => {
+		const { readFile, writeFile } = require("fs").promises;
+		const { resolveConfig } = require("prettier");
+		const { removeMagicComments } = require("./transform");
+
+		await removeMagicCommentsFromFile("input.ts", "output.ts");
+
+		expect(readFile).toHaveBeenCalledWith("input.ts", "utf-8");
+
+		expect(resolveConfig).toHaveBeenCalledWith("input.ts");
+
+		expect(removeMagicComments).toHaveBeenCalledWith("some text");
+
+		expect(writeFile).toHaveBeenCalledWith(
+			"output.ts",
+			"text with magic comments removed",
 			"utf-8",
 		);
 	});

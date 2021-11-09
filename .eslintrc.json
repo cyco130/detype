@@ -33,6 +33,13 @@
 	"ignorePatterns": "tes-files/**/*",
 	"rules": {
 		"no-only-tests/no-only-tests": "error",
-		"@typescript-eslint/no-non-null-assertion": "off"
+		"@typescript-eslint/no-non-null-assertion": "off",
+		"prefer-const": [
+			"error",
+			{
+				"destructuring": "all",
+				"ignoreReadBeforeAssign": false
+			}
+		]
 	}
 }

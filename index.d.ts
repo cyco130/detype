@@ -29,3 +29,13 @@ export function transformFile(
  * @param input
  */
 export function removeMagicComments(input: string): string;
+
+/**
+ * Remove magic comments from the input file and write the output to another file
+ * @param inputFileName
+ * @param outputFileName
+ */
+export function removeMagicCommentsFromFile(
+	inputFileName: string,
+	outputFileName: string,
+): Promise<void>;

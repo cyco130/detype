@@ -1,14 +1,28 @@
 import fs from "fs";
 import path from "path";
-import { transformFile } from "./transformFile";
+import { removeMagicCommentsFromFile, transformFile } from "./transformFile";
 import glob from "fast-glob";
+import pkg from "../package.json";
 
 const { stat, mkdir } = fs.promises;
 
-export async function cli(input: string, output?: string): Promise<boolean> {
-	if (!input) {
+export async function cli(...args: string[]): Promise<boolean> {
+	let [flag, input, output] = args;
+
+	if (!flag || flag === "-h" || flag === "--help") {
 		printUsage();
-		return false;
+		return !!flag;
+	}
+
+	if (flag === "-v" || flag === "--version") {
+		console.log(VERSION);
+		return true;
+	}
+
+	const removeMagic = flag === "-m" || flag === "--remove-magic-comments";
+
+	if (!removeMagic) {
+		[input, output] = args;
 	}
 
 	const inputStat = await stat(input);
@@ -25,18 +39,20 @@ export async function cli(input: string, output?: string): Promise<boolean> {
 		);
 		const dirs = [...new Set(files.map((file) => path.dirname(file)))].sort();
 
-		await mkdirp(output);
+		await mkdir(output, { recursive: true });
 
 		for (const dir of dirs) {
 			const outDir = path.join(output, path.relative(input, dir));
 			if (outDir === output) continue;
-			await mkdirp(outDir);
+			await mkdir(outDir, { recursive: true });
 		}
 
 		for (const file of files) {
 			const inputDir = path.dirname(path.relative(input, file));
 			const outputName = inferName(file, path.join(output, inputDir));
-			await transformFile(file, outputName);
+			removeMagic
+				? await removeMagicCommentsFromFile(file, outputName)
+				: await transformFile(file, outputName);
 		}
 
 		return true;
@@ -55,54 +71,76 @@ export async function cli(input: string, output?: string): Promise<boolean> {
 			output = inferName(input, output);
 		}
 	} else {
+		if (removeMagic) {
+			console.error(
+				"Output file name is required when removing magic comments",
+			);
+			return false;
+		}
+
+		if (input.endsWith(".vue")) {
+			console.error("Output file name is required for .vue files");
+			return false;
+		}
+
 		output = inferName(input);
 	}
 
 	const outputDir = path.dirname(output);
 
 	if (outputDir) {
-		await mkdirp(outputDir);
+		await mkdir(outputDir, { recursive: true });
 	}
 
-	await transformFile(input, output);
+	removeMagic
+		? await removeMagicCommentsFromFile(input, output)
+		: await transformFile(input, output);
 
 	return true;
-}
 
-function inferName(input: string, outputDir?: string) {
-	let output: string;
+	function inferName(input: string, outputDir?: string) {
+		let output: string;
 
-	const { dir, name, ext } = path.parse(input);
+		const { dir, name, ext } = path.parse(input);
 
-	if (ext === ".ts") {
-		output = path.join(outputDir ?? dir, name + ".js");
-	} else if (ext === ".tsx") {
-		output = path.join(outputDir ?? dir, name + ".jsx");
-	} else if (ext === ".vue") {
-		output = path.join(outputDir ?? dir, name + ".vue");
-	} else {
-		throw new Error(`Unknwon file extension ${input}`);
-	}
-
-	return output;
-}
-
-async function mkdirp(dir: string) {
-	await mkdir(dir, { recursive: true }).catch((error) => {
-		// Ignore file exists error
-		if (error && error.code == "EEXIST") {
-			return;
+		if (removeMagic) {
+			output = path.join(outputDir ?? dir, `${name}${ext}`);
+		} else if (ext === ".ts") {
+			output = path.join(outputDir ?? dir, name + ".js");
+		} else if (ext === ".tsx") {
+			output = path.join(outputDir ?? dir, name + ".jsx");
+		} else if (ext === ".vue") {
+			output = path.join(outputDir ?? dir, name + ".vue");
+		} else {
+			throw new Error(`Unknwon file extension ${input}`);
 		}
 
-		throw error;
-	});
+		return output;
+	}
 }
 
 function printUsage() {
-	console.error(`Usage:
-  detype input.ts output.js
-  detype file.ts # Output to file.js
-  detype file.tsx # Output to file.jsx
-  detype file.ts output-dir # Output to output-dir/file.sjs
-  detype input-dir output-dir # Process recursively, rename .ts(x) as .js(x)`);
+	console.error(USAGE);
 }
+
+const USAGE = `Usage:
+
+  detype [-m | --remove-magic-comments] <INPUT> [OUTPUT]
+
+    INPUT   Input file or directory
+
+    OUTPUT  Output file or directory
+      (optional if it can be inferred and won't it overwrite the source file)
+
+    -m, --remove-magic-comments
+      Remove magic comments only, don't perform ts > js transform
+
+  detype [-v | --version]
+
+    Print version and exit
+
+  detype [-h | --help]
+
+    Print this help and exit`;
+
+const VERSION = pkg.version;

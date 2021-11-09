@@ -6,7 +6,9 @@
 npm i -g detype
 ```
 
-**detype** is a command line tool and library to remove type annotations and other TypeScript specific syntax constructs and output vanilla JavaScript **without altering the source formatting** too much. It supports `.ts`, `.tsx`, as well as `.vue` extensions.
+Suppose you have a library that you want to provide usage examples for. **detype** can help you generate vanilla JavaScript samples from TypeScript samples automatically and remove the burden of maintaining two separate versions of what is essentially the same code.
+
+It is a command line tool and a library that removes type annotations and other TypeScript specific syntax constructs and outputs vanilla JavaScript **without altering the source formatting** too much. It supports `.ts`, `.tsx`, as well as `.vue` files.
 
 In other words, it turns this:
 
@@ -43,26 +45,68 @@ export function bar(foo) {
 }
 ```
 
-It achieves this using [Babel](https://babeljs.io/), [Babel's TypeScript preset](https://babeljs.io/docs/en/babel-preset-typescript), a small custom Babel plugin to remove comments attached to TypeScript-only constructs, and [Prettier](https://prettier.io/). For Vue files, it uses the tools from the [VueDX project](https://github.com/vuedx/languagetools) The output is very close to hand-written JavaScript, especially if you were already using Prettier for formatting.
+The output is very close to hand-written JavaScript, especially if you were already using Prettier for formatting.
 
-**One possible use case** is the following: Suppose you have a library that you want to provide usage examples for. Automatically generating vanilla JavaScript samples from TypeScript samples using `detype` would remove the burden of maintaining two separate versions of what is essentially the same code.
+## Doesn't `tsc` already do that?
 
-## Installation
+There are lots of tools for transpiling TypeScript into plain JavaScript (`tsc`, `babel`, `swc`, `esbuild`, `sucrase` etc.) but none of them is perfectly suitable for this specific use case. Most of them don't preserve the formatting at all. `sucrase` comes close, but it doesn't remove comments attached to TypeScript-only constructs.
 
-```sh
-npm install detype
+`detype` uses [Babel](https://babeljs.io/), a small Babel plugin to remove comments attached to TypeScript-only constructs, and [Prettier](https://prettier.io/) under the hood. For Vue files, it also uses the tools from the [VueDX project](https://github.com/vuedx/languagetools).
+
+## Magic comments
+
+Sometimes you want the generated JavaScript to be slightly different than the TypeScript original. You can use the magic comments feature to achieve this:
+
+Input:
+
+```ts
+// @detype: replace
+// These two lines will be removed
+console.log("Hello from TypeScript");
+// @detype: with
+// // Notice the double comments!
+// console.log("Hello from JavaScript");
+// @detype: end
 ```
+
+Output:
+
+```js
+// Notice the double comments!
+console.log("Hello from JavaScript");
+```
+
+If you just want to remove the magic comments, you can use the `-m` CLI flag or the `removeMagicComments` function to generate uncluttered TypeScript like this:
+
+```ts
+// These two lines will be removed
+console.log("Hello from TypeScript");
+```
+
+## System requirements
 
 `detype` requires Node version 12.22.7 or later.
 
 ## CLI Usage
 
-```sh
-detype input.ts output.js
-detype file.ts # Output to file.js
-detype file.tsx # Output to file.jsx
-detype file.ts output-dir # Output to output-dir/file.sjs
-detype input-dir output-dir # Process recursively, rename .ts(x) as .js(x)
+```
+detype [-m | --remove-magic-comments] <INPUT> [OUTPUT]
+
+  INPUT   Input file or directory
+
+  OUTPUT  Output file or directory
+    (optional if it can be inferred and it won't overwrite the source file)
+
+  -m, --remove-magic-comments
+    Remove magic comments only, don't perform ts > js transform
+
+detype [-v | --version]
+
+  Print version and exit
+
+detype [-h | --help]
+
+  Print this help and exit
 ```
 
 ## Node API
@@ -70,31 +114,44 @@ detype input-dir output-dir # Process recursively, rename .ts(x) as .js(x)
 ```ts
 // Transform TypeScript code into vanilla JavaScript without affecting the formatting
 function transform(
-	// Source coude
-	code: string,
-	// File name for the source (useful for distinguishing between .ts and .tsx)
-	fileName: string,
-	// Options to pass to prettier
-	prettierOptions?: PrettierOptions | null,
+  // Source code
+  code: string,
+  // File name for the source (useful for distinguishing between .ts and .tsx)
+  fileName: string,
+  // Options to pass to prettier
+  prettierOptions?: PrettierOptions | null,
 ): Promise<string>;
 
 // Transform the input file and write the output to another file
 function transformFile(
-	inputFileName: string,
-	outputFileName: string,
+  inputFileName: string,
+  outputFileName: string,
+): Promise<void>;
+
+// Remove magic comments without performing the TS to JS transform
+export function removeMagicComments(input: string): string;
+
+// Remove magic comments from the input file and write the output to another file
+export function removeMagicCommentsFromFile(
+  inputFileName: string,
+  outputFileName: string,
 ): Promise<void>;
 ```
 
 ## Change log
-## 0.3
-- feat: Magic comments
-- feat: Expose type declarations
+### 0.4
+- feature: CLI support for removing magic comments
+- chore: Improve documentation
+
+### 0.3
+- feature: Magic comments
+- feature: Expose type declarations
 - fix: Better empty line handling
 
-## 0.2
-- feat: for Vue single file components
+### 0.2
+- feature: for Vue single file components
 
-## 0.1
+### 0.1
 - Initial release
 
 ## Credits
