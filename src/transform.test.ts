@@ -56,7 +56,7 @@ describe("transform function", () => {
 			"utf-8",
 		);
 
-		const output = removeMagicComments(input);
+		const output = removeMagicComments(input, "input.ts");
 
 		expect(output).toBe(expected);
 	});

@@ -57,7 +57,11 @@ describe("removeMagicCommentsFromFile function", () => {
 
 		expect(resolveConfig).toHaveBeenCalledWith("input.ts");
 
-		expect(removeMagicComments).toHaveBeenCalledWith("some text");
+		expect(removeMagicComments).toHaveBeenCalledWith(
+			"some text",
+			"input.ts",
+			"mock prettier config",
+		);
 
 		expect(writeFile).toHaveBeenCalledWith(
 			"output.ts",
