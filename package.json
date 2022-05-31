@@ -5,7 +5,7 @@
 	"main": "dist/index.js",
 	"bin": "detype.js",
 	"engines": {
-		"node": ">=12.22.7"
+		"node": ">=14.19.3"
 	},
 	"scripts": {
 		"prepack": "rimraf dist && pnpm build",

@@ -85,7 +85,7 @@ console.log("Hello from TypeScript");
 
 ## System requirements
 
-`detype` requires Node version 12.22.7 or later.
+`detype` requires Node version 14.19.3 or later.
 
 ## CLI Usage
 

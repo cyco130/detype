@@ -16,7 +16,7 @@ import type { PrettierOptions } from ".";
 // @ts-expect-error: No typinggs needed
 import babelTs from "@babel/preset-typescript";
 
-// Needed for Node 12
+// Needed for Node 14
 // @ts-expect-error: No typinggs
 import { shim } from "string.prototype.replaceall";
 shim();
