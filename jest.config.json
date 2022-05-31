@@ -1,6 +1,0 @@
-{
-	"rootDir": "src",
-	"transform": {
-		"^.+\\.(js|ts)$": ["esbuild-jest", { "sourcemap": true }]
-	}
-}
