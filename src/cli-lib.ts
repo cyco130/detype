@@ -7,7 +7,8 @@ import pkg from "../package.json";
 const { stat, mkdir } = fs.promises;
 
 export async function cli(...args: string[]): Promise<boolean> {
-	let [flag, input, output] = args;
+	const [flag] = args;
+	let [, input, output] = args;
 
 	if (!flag || flag === "-h" || flag === "--help") {
 		printUsage();
@@ -15,6 +16,7 @@ export async function cli(...args: string[]): Promise<boolean> {
 	}
 
 	if (flag === "-v" || flag === "--version") {
+		// eslint-disable-next-line no-console
 		console.log(VERSION);
 		return true;
 	}
