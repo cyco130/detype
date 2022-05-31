@@ -1,26 +1,28 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { cli } from "./cli-lib";
 
-jest.mock("fs", () => {
+vi.mock("fs", async () => {
 	// Partial mock to make Babel happy
-	const fs = jest.requireActual("fs");
+	const fs = ((await vi.importActual("fs")) as any).default;
 
 	return {
-		...fs,
-		promises: {
-			...fs.promises,
-			stat: jest.fn(),
-			mkdir: jest.fn(),
+		default: {
+			...fs,
+			promises: {
+				...fs.promises,
+				stat: vi.fn(),
+				mkdir: vi.fn(),
+			},
 		},
 	};
 });
-jest.mock("./transformFile");
-jest.mock("fast-glob");
+vi.mock("./transformFile");
+vi.mock("fast-glob");
 
 const originalConsoleError = console.error;
 
 beforeEach(() => {
-	console.error = jest.fn();
+	console.error = vi.fn();
 });
 
 afterEach(() => {
@@ -29,20 +31,17 @@ afterEach(() => {
 
 describe("TypeScript to JavaScript conversion", () => {
 	it("honors input file and output file", async () => {
-		const { stat, mkdir } = require("fs").promises as Record<string, jest.Mock>;
-		const { transformFile } = require("./transformFile") as Record<
-			string,
-			jest.Mock
-		>;
+		const { stat, mkdir } = (await import("fs")).default.promises;
+		const { transformFile } = await import("./transformFile");
 
-		stat.mockResolvedValue({
-			isFile: jest.fn().mockReturnValue(true),
-			isDirectory: jest.fn().mockReturnValue(false),
-		});
+		vi.mocked(stat).mockResolvedValue({
+			isFile: vi.fn().mockReturnValue(true),
+			isDirectory: vi.fn().mockReturnValue(false),
+		} as any);
 
-		mkdir.mockResolvedValue(undefined);
+		vi.mocked(mkdir).mockResolvedValue(undefined);
 
-		transformFile.mockResolvedValue(undefined);
+		vi.mocked(transformFile).mockResolvedValue(undefined);
 
 		await cli("input.ts", "output/dir/output.js");
 
@@ -57,18 +56,15 @@ describe("TypeScript to JavaScript conversion", () => {
 	});
 
 	it("infers output file name .js", async () => {
-		const { stat } = require("fs").promises as Record<string, jest.Mock>;
-		const { transformFile } = require("./transformFile") as Record<
-			string,
-			jest.Mock
-		>;
+		const { stat } = (await import("fs")).default.promises;
+		const { transformFile } = await import("./transformFile");
 
-		stat.mockResolvedValue({
-			isFile: jest.fn().mockReturnValue(true),
-			isDirectory: jest.fn().mockReturnValue(false),
-		});
+		vi.mocked(stat).mockResolvedValue({
+			isFile: vi.fn().mockReturnValue(true),
+			isDirectory: vi.fn().mockReturnValue(false),
+		} as any);
 
-		transformFile.mockResolvedValue(undefined);
+		vi.mocked(transformFile).mockResolvedValue(undefined);
 
 		await cli("file.ts");
 
@@ -76,18 +72,15 @@ describe("TypeScript to JavaScript conversion", () => {
 	});
 
 	it("infers output file name .jsx", async () => {
-		const { stat } = require("fs").promises as Record<string, jest.Mock>;
-		const { transformFile } = require("./transformFile") as Record<
-			string,
-			jest.Mock
-		>;
+		const { stat } = (await import("fs")).default.promises;
+		const { transformFile } = await import("./transformFile");
 
-		stat.mockResolvedValue({
-			isFile: jest.fn().mockReturnValue(true),
-			isDirectory: jest.fn().mockReturnValue(false),
-		});
+		vi.mocked(stat).mockResolvedValue({
+			isFile: vi.fn().mockReturnValue(true),
+			isDirectory: vi.fn().mockReturnValue(false),
+		} as any);
 
-		transformFile.mockResolvedValue(undefined);
+		vi.mocked(transformFile).mockResolvedValue(undefined);
 
 		await cli("file.tsx");
 
@@ -95,12 +88,13 @@ describe("TypeScript to JavaScript conversion", () => {
 	});
 
 	it("rejects implicitly overwriting .vue files", async () => {
-		const { stat, mkdir } = require("fs").promises as Record<string, jest.Mock>;
-		stat.mockResolvedValue({
-			isFile: jest.fn().mockReturnValue(true),
-			isDirectory: jest.fn().mockReturnValue(false),
-		});
-		mkdir.mockResolvedValue(undefined);
+		const { stat, mkdir } = (await import("fs")).default.promises;
+
+		vi.mocked(stat).mockResolvedValue({
+			isFile: vi.fn().mockReturnValue(true),
+			isDirectory: vi.fn().mockReturnValue(false),
+		} as any);
+		vi.mocked(mkdir).mockResolvedValue(undefined);
 
 		const result = await cli("file.vue");
 		expect(result).toBe(false);
@@ -110,29 +104,26 @@ describe("TypeScript to JavaScript conversion", () => {
 	});
 
 	it("infers output file name from directory", async () => {
-		const { stat, mkdir } = require("fs").promises as Record<string, jest.Mock>;
-		const { transformFile } = require("./transformFile") as Record<
-			string,
-			jest.Mock
-		>;
+		const { stat, mkdir } = (await import("fs")).default.promises;
+		const { transformFile } = await import("./transformFile");
 
-		stat.mockImplementation(async (name: string) => {
+		vi.mocked(stat as any).mockImplementation(async (name: string) => {
 			if (name === "file.ts") {
 				return {
-					isFile: jest.fn().mockReturnValue(true),
-					isDirectory: jest.fn().mockReturnValue(false),
+					isFile: vi.fn().mockReturnValue(true),
+					isDirectory: vi.fn().mockReturnValue(false),
 				};
 			} else {
 				return {
-					isFile: jest.fn().mockReturnValue(false),
-					isDirectory: jest.fn().mockReturnValue(true),
+					isFile: vi.fn().mockReturnValue(false),
+					isDirectory: vi.fn().mockReturnValue(true),
 				};
 			}
 		});
 
-		mkdir.mockResolvedValue(undefined);
+		vi.mocked(mkdir).mockResolvedValue(undefined);
 
-		transformFile.mockResolvedValue(undefined);
+		vi.mocked(transformFile).mockResolvedValue(undefined);
 
 		await cli("file.ts", "output/dir");
 
@@ -144,23 +135,20 @@ describe("TypeScript to JavaScript conversion", () => {
 	});
 
 	it("walks the file system", async () => {
-		const { stat, mkdir } = require("fs").promises as Record<string, jest.Mock>;
-		const { transformFile } = require("./transformFile") as Record<
-			string,
-			jest.Mock
-		>;
-		const glob = require("fast-glob") as jest.Mock;
+		const { stat, mkdir } = (await import("fs")).default.promises;
+		const { transformFile } = await import("./transformFile");
+		const glob = (await import("fast-glob")).default;
 
-		stat.mockResolvedValue({
-			isFile: jest.fn().mockReturnValue(false),
-			isDirectory: jest.fn().mockReturnValue(true),
-		});
+		vi.mocked(stat).mockResolvedValue({
+			isFile: vi.fn().mockReturnValue(false),
+			isDirectory: vi.fn().mockReturnValue(true),
+		} as any);
 
-		mkdir.mockResolvedValue(undefined);
+		vi.mocked(mkdir).mockResolvedValue(undefined);
 
-		transformFile.mockResolvedValue(undefined);
+		vi.mocked(transformFile).mockResolvedValue(undefined);
 
-		glob.mockResolvedValue([
+		vi.mocked(glob).mockResolvedValue([
 			"input-dir/one.ts",
 			"input-dir/nested/two.tsx",
 			"input-dir/nested/deep/three.vue",
@@ -193,18 +181,17 @@ describe("TypeScript to JavaScript conversion", () => {
 
 describe("TypeScript magic comment removal", () => {
 	it("honors input file and output file", async () => {
-		const { stat, mkdir } = require("fs").promises as Record<string, jest.Mock>;
-		const { removeMagicCommentsFromFile } =
-			require("./transformFile") as Record<string, jest.Mock>;
+		const { stat, mkdir } = (await import("fs")).default.promises;
+		const { removeMagicCommentsFromFile } = await import("./transformFile");
 
-		stat.mockResolvedValue({
-			isFile: jest.fn().mockReturnValue(true),
-			isDirectory: jest.fn().mockReturnValue(false),
-		});
+		vi.mocked(stat).mockResolvedValue({
+			isFile: vi.fn().mockReturnValue(true),
+			isDirectory: vi.fn().mockReturnValue(false),
+		} as any);
 
-		mkdir.mockResolvedValue(undefined);
+		vi.mocked(mkdir).mockResolvedValue(undefined);
 
-		removeMagicCommentsFromFile.mockResolvedValue(undefined);
+		vi.mocked(removeMagicCommentsFromFile).mockResolvedValue(undefined);
 
 		await cli("-m", "input.ts", "output/dir/output.ts");
 
@@ -219,12 +206,12 @@ describe("TypeScript magic comment removal", () => {
 	});
 
 	it("rejects when output file name is not given", async () => {
-		const { stat, mkdir } = require("fs").promises as Record<string, jest.Mock>;
-		stat.mockResolvedValue({
-			isFile: jest.fn().mockReturnValue(true),
-			isDirectory: jest.fn().mockReturnValue(false),
-		});
-		mkdir.mockResolvedValue(undefined);
+		const { stat, mkdir } = (await import("fs")).default.promises;
+		vi.mocked(stat).mockResolvedValue({
+			isFile: vi.fn().mockReturnValue(true),
+			isDirectory: vi.fn().mockReturnValue(false),
+		} as any);
+		vi.mocked(mkdir).mockResolvedValue(undefined);
 
 		const result = await cli("-m", "file.ts");
 		expect(result).toBe(false);
@@ -234,27 +221,26 @@ describe("TypeScript magic comment removal", () => {
 	});
 
 	it("infers output file name from directory", async () => {
-		const { stat, mkdir } = require("fs").promises as Record<string, jest.Mock>;
-		const { removeMagicCommentsFromFile } =
-			require("./transformFile") as Record<string, jest.Mock>;
+		const { stat, mkdir } = (await import("fs")).default.promises;
+		const { removeMagicCommentsFromFile } = await import("./transformFile");
 
-		stat.mockImplementation(async (name: string) => {
+		vi.mocked(stat as any).mockImplementation(async (name: string) => {
 			if (name === "file.ts") {
 				return {
-					isFile: jest.fn().mockReturnValue(true),
-					isDirectory: jest.fn().mockReturnValue(false),
+					isFile: vi.fn().mockReturnValue(true),
+					isDirectory: vi.fn().mockReturnValue(false),
 				};
 			} else {
 				return {
-					isFile: jest.fn().mockReturnValue(false),
-					isDirectory: jest.fn().mockReturnValue(true),
+					isFile: vi.fn().mockReturnValue(false),
+					isDirectory: vi.fn().mockReturnValue(true),
 				};
 			}
 		});
 
-		mkdir.mockResolvedValue(undefined);
+		vi.mocked(mkdir).mockResolvedValue(undefined);
 
-		removeMagicCommentsFromFile.mockResolvedValue(undefined);
+		vi.mocked(removeMagicCommentsFromFile).mockResolvedValue(undefined);
 
 		await cli("-m", "file.ts", "output/dir");
 
@@ -269,21 +255,20 @@ describe("TypeScript magic comment removal", () => {
 	});
 
 	it("walks the file system", async () => {
-		const { stat, mkdir } = require("fs").promises as Record<string, jest.Mock>;
-		const { removeMagicCommentsFromFile } =
-			require("./transformFile") as Record<string, jest.Mock>;
-		const glob = require("fast-glob") as jest.Mock;
+		const { stat, mkdir } = (await import("fs")).default.promises;
+		const { removeMagicCommentsFromFile } = await import("./transformFile");
+		const glob = (await import("fast-glob")).default;
 
-		stat.mockResolvedValue({
-			isFile: jest.fn().mockReturnValue(false),
-			isDirectory: jest.fn().mockReturnValue(true),
-		});
+		vi.mocked(stat).mockResolvedValue({
+			isFile: vi.fn().mockReturnValue(false),
+			isDirectory: vi.fn().mockReturnValue(true),
+		} as any);
 
-		mkdir.mockResolvedValue(undefined);
+		vi.mocked(mkdir).mockResolvedValue(undefined);
 
-		removeMagicCommentsFromFile.mockResolvedValue(undefined);
+		vi.mocked(removeMagicCommentsFromFile).mockResolvedValue(undefined);
 
-		glob.mockResolvedValue([
+		vi.mocked(glob).mockResolvedValue([
 			"input-dir/one.ts",
 			"input-dir/nested/two.tsx",
 			"input-dir/nested/deep/three.vue",

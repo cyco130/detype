@@ -1,29 +1,31 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+import { describe, it, expect, vi } from "vitest";
 import { removeMagicCommentsFromFile, transformFile } from "./transformFile";
 
-jest.mock("fs", () => ({
-	promises: {
-		readFile: jest.fn().mockResolvedValue("some text"),
-		writeFile: jest.fn(),
+vi.mock("fs", () => ({
+	default: {
+		promises: {
+			readFile: vi.fn().mockResolvedValue("some text"),
+			writeFile: vi.fn(),
+		},
 	},
 }));
 
-jest.mock("prettier", () => ({
-	resolveConfig: jest.fn().mockResolvedValue("mock prettier config"),
+vi.mock("prettier", () => ({
+	resolveConfig: vi.fn().mockResolvedValue("mock prettier config"),
 }));
 
-jest.mock("./transform", () => ({
-	transform: jest.fn().mockResolvedValue("transformed text"),
-	removeMagicComments: jest
+vi.mock("./transform", () => ({
+	transform: vi.fn().mockResolvedValue("transformed text"),
+	removeMagicComments: vi
 		.fn()
 		.mockResolvedValue("text with magic comments removed"),
 }));
 
 describe("transformFile function", () => {
 	it("transforms file", async () => {
-		const { readFile, writeFile } = require("fs").promises;
-		const { resolveConfig } = require("prettier");
-		const { transform } = require("./transform");
+		const { readFile, writeFile } = (await import("fs")).default.promises;
+		const { resolveConfig } = await import("prettier");
+		const { transform } = await import("./transform");
 
 		await transformFile("input.ts", "output.js");
 
@@ -47,9 +49,9 @@ describe("transformFile function", () => {
 
 describe("removeMagicCommentsFromFile function", () => {
 	it("removes magic comments", async () => {
-		const { readFile, writeFile } = require("fs").promises;
-		const { resolveConfig } = require("prettier");
-		const { removeMagicComments } = require("./transform");
+		const { readFile, writeFile } = (await import("fs")).default.promises;
+		const { resolveConfig } = await import("prettier");
+		const { removeMagicComments } = await import("./transform");
 
 		await removeMagicCommentsFromFile("input.ts", "output.ts");
 

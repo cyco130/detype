@@ -6,7 +6,7 @@
 		"esModuleInterop": true,
 		"target": "es6",
 		"moduleResolution": "node",
-		"types": ["node", "jest"],
+		"types": ["node"],
 		"skipLibCheck": true,
 		"resolveJsonModule": true
 	},
