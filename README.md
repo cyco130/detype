@@ -22,13 +22,13 @@ let x: string;
 // This comment should be deleted
 // Ditto for this
 interface Foo {
-  // This should go too
-  bar: number;
+	// This should go too
+	bar: number;
 }
 
 // This comment should also be kept
 export function bar(foo: Foo): Date {
-  return new Date();
+	return new Date();
 }
 ```
 
@@ -41,7 +41,7 @@ let x;
 
 // This comment should also be kept
 export function bar(foo) {
-  return new Date();
+	return new Date();
 }
 ```
 
@@ -114,52 +114,58 @@ detype [-h | --help]
 ```ts
 // Transform TypeScript code into vanilla JavaScript without affecting the formatting
 function transform(
-  // Source code
-  code: string,
-  // File name for the source
-  fileName: string,
-  // Options to pass to prettier
-  prettierOptions?: PrettierOptions | null,
+	// Source code
+	code: string,
+	// File name for the source
+	fileName: string,
+	// Options to pass to prettier
+	prettierOptions?: PrettierOptions | null,
 ): Promise<string>;
 
 // Transform the input file and write the output to another file
 function transformFile(
-  inputFileName: string,
-  outputFileName: string,
+	inputFileName: string,
+	outputFileName: string,
 ): Promise<void>;
 
 // Remove magic comments without performing the TS to JS transform
 export function removeMagicComments(
-  // Source code
-  code: string,
-  // File name for the source
-  fileName: string,
-  // Options to pass to prettier
-  prettierOptions?: PrettierOptions | null,
+	// Source code
+	code: string,
+	// File name for the source
+	fileName: string,
+	// Options to pass to prettier
+	prettierOptions?: PrettierOptions | null,
 ): string;
 
 // Remove magic comments from the input file and write the output to another file
 export function removeMagicCommentsFromFile(
-  inputFileName: string,
-  outputFileName: string,
+	inputFileName: string,
+	outputFileName: string,
 ): Promise<void>;
 ```
 
 ## Change log
+
 ### 0.4
+
 - feature: CLI support for removing magic comments
 - chore: Improve documentation
 
 ### 0.3
+
 - feature: Magic comments
 - feature: Expose type declarations
 - fix: Better empty line handling
 
 ### 0.2
+
 - feature: for Vue single file components
 
 ### 0.1
+
 - Initial release
 
 ## Credits
+
 Fatih Aygün, under MIT License

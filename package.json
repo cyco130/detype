@@ -15,7 +15,8 @@
 		"test:unit": "vitest run",
 		"test:typecheck": "tsc -p tsconfig.json --noEmit",
 		"test:lint": "eslint src --max-warnings 0",
-		"format": "prettier . --write"
+		"test:prettier": "prettier --check --ignore-path .gitignore --ignore-unknown . '!pnpm-lock.yaml'",
+		"format": "prettier . --write --ignore-path .gitignore --ignore-unknown . '!pnpm-lock.yaml'"
 	},
 	"files": [
 		"dist/**/*",
