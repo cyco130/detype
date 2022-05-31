@@ -1,6 +1,6 @@
 import { transformAsync } from "@babel/core";
 import type { VisitNodeObject, Node } from "@babel/traverse";
-import { format, Options as PrettierOptions } from "prettier";
+import { format } from "prettier";
 import {
 	parse as parseVueSfc,
 	SFCTemplateBlock as VueSfcTemplateBlock,
@@ -11,6 +11,7 @@ import {
 	isSimpleExpressionNode as isVueSimpleExpressionNode,
 	isComponentNode as isVueComponentNode,
 } from "@vuedx/template-ast-types";
+import type { PrettierOptions } from ".";
 
 // @ts-expect-error: No typinggs needed
 import babelTs from "@babel/preset-typescript";
@@ -22,6 +23,12 @@ shim();
 
 type VueElementNode = VueSfcTemplateBlock["ast"];
 
+/**
+ * Transform TypeScript code into vanilla JavaScript without affecting the formatting
+ * @param code            Source coude
+ * @param fileName        File name for the source
+ * @param prettierOptions Options to pass to prettier
+ */
 export async function transform(
 	code: string,
 	fileName: string,
@@ -222,6 +229,12 @@ export function processMagicComments(input: string): string {
 	return input;
 }
 
+/**
+ * Removes magic comments without performing the TS to JS transform
+ * @param code            Source coude
+ * @param fileName        File name for the source
+ * @param prettierOptions Options to pass to prettier
+ */
 export function removeMagicComments(
 	code: string,
 	fileName: string,

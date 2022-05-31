@@ -4,6 +4,11 @@ import { resolveConfig } from "prettier";
 
 const { readFile, writeFile } = fs.promises;
 
+/**
+ * Transform the input file and write the output to another file
+ * @param inputFileName
+ * @param outputFileName
+ */
 export async function transformFile(
 	inputFileName: string,
 	outputFileName: string,
@@ -14,6 +19,11 @@ export async function transformFile(
 	await writeFile(outputFileName, output, "utf-8");
 }
 
+/**
+ * Remove magic comments from the input file and write the output to another file
+ * @param inputFileName
+ * @param outputFileName
+ */
 export async function removeMagicCommentsFromFile(
 	inputFileName: string,
 	outputFileName: string,
