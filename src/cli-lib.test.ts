@@ -1,3 +1,4 @@
+import path from "path";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { cli } from "./cli-lib";
 
@@ -45,13 +46,13 @@ describe("TypeScript to JavaScript conversion", () => {
 
 		await cli("input.ts", "output/dir/output.js");
 
-		expect(mkdir).toHaveBeenLastCalledWith("output/dir", {
+		expect(mkdir).toHaveBeenLastCalledWith(path.normalize("output/dir"), {
 			recursive: true,
 		});
 
 		expect(transformFile).toHaveBeenCalledWith(
 			"input.ts",
-			"output/dir/output.js",
+			path.normalize("output/dir/output.js"),
 		);
 	});
 
@@ -127,11 +128,14 @@ describe("TypeScript to JavaScript conversion", () => {
 
 		await cli("file.ts", "output/dir");
 
-		expect(mkdir).toHaveBeenLastCalledWith("output/dir", {
+		expect(mkdir).toHaveBeenLastCalledWith(path.normalize("output/dir"), {
 			recursive: true,
 		});
 
-		expect(transformFile).toHaveBeenCalledWith("file.ts", "output/dir/file.js");
+		expect(transformFile).toHaveBeenCalledWith(
+			"file.ts",
+			path.normalize("output/dir/file.js"),
+		);
 	});
 
 	it("walks the file system", async () => {
@@ -149,32 +153,37 @@ describe("TypeScript to JavaScript conversion", () => {
 		vi.mocked(transformFile).mockResolvedValue(undefined);
 
 		vi.mocked(glob).mockResolvedValue([
-			"input-dir/one.ts",
-			"input-dir/nested/two.tsx",
-			"input-dir/nested/deep/three.vue",
+			path.normalize("input-dir/one.ts"),
+			path.normalize("input-dir/nested/two.tsx"),
+			path.normalize("input-dir/nested/deep/three.vue"),
 		]);
 
 		await cli("input-dir", "output/dir");
 
-		expect(mkdir).toHaveBeenCalledWith("output/dir", { recursive: true });
-		expect(mkdir).toHaveBeenCalledWith("output/dir/nested", {
+		expect(mkdir).toHaveBeenCalledWith(path.normalize("output/dir"), {
 			recursive: true,
 		});
-		expect(mkdir).toHaveBeenCalledWith("output/dir/nested/deep", {
+		expect(mkdir).toHaveBeenCalledWith(path.normalize("output/dir/nested"), {
 			recursive: true,
 		});
+		expect(mkdir).toHaveBeenCalledWith(
+			path.normalize("output/dir/nested/deep"),
+			{
+				recursive: true,
+			},
+		);
 
 		expect(transformFile).toHaveBeenCalledWith(
-			"input-dir/one.ts",
-			"output/dir/one.js",
+			path.normalize("input-dir/one.ts"),
+			path.normalize("output/dir/one.js"),
 		);
 		expect(transformFile).toHaveBeenCalledWith(
-			"input-dir/nested/two.tsx",
-			"output/dir/nested/two.jsx",
+			path.normalize("input-dir/nested/two.tsx"),
+			path.normalize("output/dir/nested/two.jsx"),
 		);
 		expect(transformFile).toHaveBeenCalledWith(
-			"input-dir/nested/deep/three.vue",
-			"output/dir/nested/deep/three.vue",
+			path.normalize("input-dir/nested/deep/three.vue"),
+			path.normalize("output/dir/nested/deep/three.vue"),
 		);
 	});
 });
@@ -195,13 +204,13 @@ describe("TypeScript magic comment removal", () => {
 
 		await cli("-m", "input.ts", "output/dir/output.ts");
 
-		expect(mkdir).toHaveBeenLastCalledWith("output/dir", {
+		expect(mkdir).toHaveBeenLastCalledWith(path.normalize("output/dir"), {
 			recursive: true,
 		});
 
 		expect(removeMagicCommentsFromFile).toHaveBeenCalledWith(
 			"input.ts",
-			"output/dir/output.ts",
+			path.normalize("output/dir/output.ts"),
 		);
 	});
 
@@ -244,13 +253,13 @@ describe("TypeScript magic comment removal", () => {
 
 		await cli("-m", "file.ts", "output/dir");
 
-		expect(mkdir).toHaveBeenLastCalledWith("output/dir", {
+		expect(mkdir).toHaveBeenLastCalledWith(path.normalize("output/dir"), {
 			recursive: true,
 		});
 
 		expect(removeMagicCommentsFromFile).toHaveBeenCalledWith(
 			"file.ts",
-			"output/dir/file.ts",
+			path.normalize("output/dir/file.ts"),
 		);
 	});
 
@@ -269,32 +278,37 @@ describe("TypeScript magic comment removal", () => {
 		vi.mocked(removeMagicCommentsFromFile).mockResolvedValue(undefined);
 
 		vi.mocked(glob).mockResolvedValue([
-			"input-dir/one.ts",
-			"input-dir/nested/two.tsx",
-			"input-dir/nested/deep/three.vue",
+			path.normalize("input-dir/one.ts"),
+			path.normalize("input-dir/nested/two.tsx"),
+			path.normalize("input-dir/nested/deep/three.vue"),
 		]);
 
 		await cli("-m", "input-dir", "output/dir");
 
-		expect(mkdir).toHaveBeenCalledWith("output/dir", { recursive: true });
-		expect(mkdir).toHaveBeenCalledWith("output/dir/nested", {
+		expect(mkdir).toHaveBeenCalledWith(path.normalize("output/dir"), {
 			recursive: true,
 		});
-		expect(mkdir).toHaveBeenCalledWith("output/dir/nested/deep", {
+		expect(mkdir).toHaveBeenCalledWith(path.normalize("output/dir/nested"), {
 			recursive: true,
 		});
+		expect(mkdir).toHaveBeenCalledWith(
+			path.normalize("output/dir/nested/deep"),
+			{
+				recursive: true,
+			},
+		);
 
 		expect(removeMagicCommentsFromFile).toHaveBeenCalledWith(
-			"input-dir/one.ts",
-			"output/dir/one.ts",
+			path.normalize("input-dir/one.ts"),
+			path.normalize("output/dir/one.ts"),
 		);
 		expect(removeMagicCommentsFromFile).toHaveBeenCalledWith(
-			"input-dir/nested/two.tsx",
-			"output/dir/nested/two.tsx",
+			path.normalize("input-dir/nested/two.tsx"),
+			path.normalize("output/dir/nested/two.tsx"),
 		);
 		expect(removeMagicCommentsFromFile).toHaveBeenCalledWith(
-			"input-dir/nested/deep/three.vue",
-			"output/dir/nested/deep/three.vue",
+			path.normalize("input-dir/nested/deep/three.vue"),
+			path.normalize("output/dir/nested/deep/three.vue"),
 		);
 	});
 });
