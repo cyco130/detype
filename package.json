@@ -11,6 +11,7 @@
 		"prepack": "rimraf dist && pnpm build",
 		"build": "tsup",
 		"dev": "tsup --watch",
+		"cq": "pnpm run test:typecheck && pnpm run test:lint && pnpm run test:prettier",
 		"test": "run-p 'test:*'",
 		"test:unit": "vitest run",
 		"test:typecheck": "tsc -p tsconfig.json --noEmit",
