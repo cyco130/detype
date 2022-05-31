@@ -36,25 +36,28 @@ export async function cli(...args: string[]): Promise<boolean> {
 			return false;
 		}
 
-		const files = (await glob(path.join(input, "**/*.{ts,tsx,vue}"))).filter(
+		const files = (await glob(unixify(input + "/**/*.{ts,tsx,vue}"))).filter(
 			(file) => !file.endsWith(".d.ts"),
 		);
 		const dirs = [...new Set(files.map((file) => path.dirname(file)))].sort();
 
-		await mkdir(output, { recursive: true });
+		await mkdir(path.normalize(output), { recursive: true });
 
 		for (const dir of dirs) {
 			const outDir = path.join(output, path.relative(input, dir));
 			if (outDir === output) continue;
-			await mkdir(outDir, { recursive: true });
+			await mkdir(path.normalize(outDir), { recursive: true });
 		}
 
 		for (const file of files) {
 			const inputDir = path.dirname(path.relative(input, file));
 			const outputName = inferName(file, path.join(output, inputDir));
 			removeMagic
-				? await removeMagicCommentsFromFile(file, outputName)
-				: await transformFile(file, outputName);
+				? await removeMagicCommentsFromFile(
+						path.normalize(file),
+						path.normalize(outputName),
+				  )
+				: await transformFile(path.normalize(file), path.normalize(outputName));
 		}
 
 		return true;
@@ -91,12 +94,15 @@ export async function cli(...args: string[]): Promise<boolean> {
 	const outputDir = path.dirname(output);
 
 	if (outputDir) {
-		await mkdir(outputDir, { recursive: true });
+		await mkdir(path.normalize(outputDir), { recursive: true });
 	}
 
 	removeMagic
-		? await removeMagicCommentsFromFile(input, output)
-		: await transformFile(input, output);
+		? await removeMagicCommentsFromFile(
+				path.normalize(input),
+				path.normalize(output),
+		  )
+		: await transformFile(path.normalize(input), path.normalize(output));
 
 	return true;
 
@@ -146,3 +152,8 @@ const USAGE = `Usage:
     Print this help and exit`;
 
 const VERSION = pkg.version;
+
+/** Unixify path */
+function unixify(name: string) {
+	return name.replaceAll(path.sep, "/");
+}
