@@ -147,6 +147,11 @@ export function removeMagicCommentsFromFile(
 
 ## Change log
 
+### 0.5
+
+- BREAKING CHANGE: Drop support for Node 12
+- chore: Set up CI workflows
+
 ### 0.4
 
 - feature: CLI support for removing magic comments
