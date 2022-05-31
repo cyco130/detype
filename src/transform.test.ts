@@ -7,17 +7,17 @@ import {
 import fs from "fs";
 import path from "path";
 
+async function readFile(fileName: string): Promise<string> {
+	return fs.promises
+		.readFile(path.resolve(__dirname, fileName), "utf8")
+		.then((s) => s.replaceAll("\r\n", "\n"));
+}
+
 describe("transform function", () => {
 	it("transforms TypeScript file", async () => {
-		const input = await fs.promises.readFile(
-			path.resolve(__dirname, "../test-files/input.ts"),
-			"utf-8",
-		);
+		const input = await readFile("../test-files/input.ts");
 
-		const expected = await fs.promises.readFile(
-			path.resolve(__dirname, "../test-files/expected.js"),
-			"utf-8",
-		);
+		const expected = await readFile("../test-files/expected.js");
 
 		const output = await transform(input, "input.ts");
 
@@ -25,15 +25,9 @@ describe("transform function", () => {
 	});
 
 	it("transforms Vue file", async () => {
-		const input = await fs.promises.readFile(
-			path.resolve(__dirname, "../test-files/input.vue"),
-			"utf-8",
-		);
+		const input = await readFile("../test-files/input.vue");
 
-		const expected = await fs.promises.readFile(
-			path.resolve(__dirname, "../test-files/expected.vue"),
-			"utf-8",
-		);
+		const expected = await readFile("../test-files/expected.vue");
 
 		const output = await transform(input, "input.vue");
 
@@ -47,15 +41,9 @@ describe("transform function", () => {
 	});
 
 	it("removes magic comments", async () => {
-		const input = await fs.promises.readFile(
-			path.resolve(__dirname, "../test-files/input.ts"),
-			"utf-8",
-		);
+		const input = await readFile("../test-files/input.ts");
 
-		const expected = await fs.promises.readFile(
-			path.resolve(__dirname, "../test-files/expected.ts"),
-			"utf-8",
-		);
+		const expected = await readFile("../test-files/expected.ts");
 
 		const output = removeMagicComments(input, "input.ts");
 
