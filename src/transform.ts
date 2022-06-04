@@ -37,6 +37,8 @@ export async function transform(
 	const originalCode = code;
 	const originalFileName = fileName;
 
+	code = code.replaceAll("\r\n", "\n");
+
 	if (fileName.endsWith(".vue")) {
 		const parsedVue = parseVueSfc(code, { filename: fileName });
 

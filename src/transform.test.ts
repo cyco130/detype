@@ -49,4 +49,17 @@ describe("transform function", () => {
 
 		expect(output).toBe(expected);
 	});
+
+	it("preserves new lines", async () => {
+		const input = (await readFile("../test-files/input.ts")).replaceAll(
+			"\n",
+			"\r\n",
+		);
+
+		const expected = await readFile("../test-files/expected.js");
+
+		const output = await transform(input, "input.ts");
+
+		expect(output).toBe(expected);
+	});
 });
