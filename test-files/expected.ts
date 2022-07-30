@@ -21,3 +21,13 @@ console.log("Hello from TypeScript 2");
 export function bar(foo: Foo): Date {
   return new Date();
 }
+
+const templateLiteral: string = `one
+
+two
+`;
+
+const stringLiteral: string = "one\
+\
+two\
+";

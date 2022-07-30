@@ -11,3 +11,13 @@ console.log("Hello from JavaScript 2");
 export function bar(foo) {
   return new Date();
 }
+
+const templateLiteral = `one
+
+two
+`;
+
+const stringLiteral = "one\
+\
+two\
+";
