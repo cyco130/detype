@@ -87,7 +87,14 @@ export async function transform(
 }
 
 async function removeTypes(code: string, fileName: string) {
-	code = code.replaceAll(/\n\n+/g, "\n/* @detype: empty-line */\n");
+	// We want to collapse newline runs created by removing types while preserving
+	// newline runes in the original code. This is especially important for
+	// template literals, which can contain literal newlines.
+	// Keep track of how many newlines in a newline run were replaced.
+	code = code.replace(
+		/\n\n+/g,
+		(match) => `\n/* @detype: empty-line=${match.length} */\n`,
+	);
 	code = processMagicComments(code);
 
 	// Babel visitor to remove leading comments
@@ -141,9 +148,15 @@ async function removeTypes(code: string, fileName: string) {
 		throw new Error("Babel error");
 	}
 
-	return babelOutput.code
-		.replaceAll(/\n\n*/g, "\n")
-		.replaceAll("/* @detype: empty-line */", "\n\n");
+	return (
+		babelOutput.code
+			.replaceAll(/\n\n*/g, "\n")
+			// Subtract 2 from the newline count because we inserted two surrounding
+			// newlines when we initially created the detype: empty-line comment.
+			.replace(/\/\* @detype: empty-line=([0-9]+) \*\//g, (_match, p1) =>
+				`\n`.repeat(p1 - 2),
+			)
+	);
 }
 
 async function removeTypesFromVueSfcScript(
