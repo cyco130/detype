@@ -19,7 +19,9 @@ describe("transform function", () => {
 
 		const expected = await readFile("../test-files/expected.js");
 
-		const output = await transform(input, "input.ts");
+		const output = await transform(input, "input.ts", {
+			removeTsComments: true,
+		});
 
 		expect(output).toBe(expected);
 	});
@@ -58,7 +60,9 @@ describe("transform function", () => {
 
 		const expected = await readFile("../test-files/expected.js");
 
-		const output = await transform(input, "input.ts");
+		const output = await transform(input, "input.ts", {
+			removeTsComments: true,
+		});
 
 		expect(output).toBe(expected);
 	});

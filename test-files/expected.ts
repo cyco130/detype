@@ -31,3 +31,6 @@ const stringLiteral: string = "one\
 \
 two\
 ";
+
+// @ts-ignore: This should be removed
+const xxx: string = 3;

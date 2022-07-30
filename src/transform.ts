@@ -23,17 +23,29 @@ shim();
 
 type VueElementNode = VueSfcTemplateBlock["ast"];
 
+export interface RemoveTypeOptions {
+	/** Whether to remove ts-ignore and ts-expect-error comments */
+	removeTsComments?: boolean;
+}
+
+export interface TransformOptions extends RemoveTypeOptions {
+	/** Prettier options */
+	prettierOptions?: PrettierOptions | null;
+}
+
 /**
  * Transform TypeScript code into vanilla JavaScript without affecting the formatting
  * @param code            Source coude
  * @param fileName        File name for the source
- * @param prettierOptions Options to pass to prettier
+ * @param options         Options
  */
 export async function transform(
 	code: string,
 	fileName: string,
-	prettierOptions?: PrettierOptions | null,
+	options: TransformOptions = {},
 ): Promise<string> {
+	const { prettierOptions, ...removeTypeOptions } = options;
+
 	const originalCode = code;
 	const originalFileName = fileName;
 
@@ -66,6 +78,7 @@ export async function transform(
 			fileName,
 			script1,
 			parsedVue.descriptor.template?.ast,
+			removeTypeOptions,
 		);
 
 		code = await removeTypesFromVueSfcScript(
@@ -73,9 +86,10 @@ export async function transform(
 			fileName,
 			script2,
 			parsedVue.descriptor.template?.ast,
+			removeTypeOptions,
 		);
 	} else {
-		code = await removeTypes(code, fileName);
+		code = await removeTypes(code, fileName, removeTypeOptions);
 	}
 
 	code = format(code, {
@@ -86,7 +100,11 @@ export async function transform(
 	return code;
 }
 
-async function removeTypes(code: string, fileName: string) {
+async function removeTypes(
+	code: string,
+	fileName: string,
+	options: RemoveTypeOptions,
+) {
 	// We want to collapse newline runs created by removing types while preserving
 	// newline runes in the original code. This is especially important for
 	// template literals, which can contain literal newlines.
@@ -136,7 +154,10 @@ async function removeTypes(code: string, fileName: string) {
 		].filter(Boolean),
 		presets: [babelTs],
 		generatorOpts: {
-			shouldPrintComment: (comment) => comment !== "@detype: remove-me",
+			shouldPrintComment: (comment) =>
+				comment !== "@detype: remove-me" &&
+				(!options.removeTsComments ||
+					!comment.match(/^\s*(@ts-ignore|@ts-expect-error)/)),
 		},
 	});
 
@@ -163,7 +184,8 @@ async function removeTypesFromVueSfcScript(
 	code: string,
 	fileName: string,
 	script: VueSfcScriptBlock | null,
-	templateAst?: VueElementNode,
+	templateAst: VueElementNode | undefined,
+	options: RemoveTypeOptions,
 ) {
 	if (script === null || script.lang !== "ts") return code;
 
@@ -189,7 +211,7 @@ async function removeTypesFromVueSfcScript(
 			"/* @detype: remove-after-this */" + [...expressions].join(";");
 	}
 
-	let scriptCode = await removeTypes(script.content, fileName + ".ts");
+	let scriptCode = await removeTypes(script.content, fileName + ".ts", options);
 
 	const removeAfterIndex = scriptCode.indexOf(
 		"/* @detype: remove-after-this */",

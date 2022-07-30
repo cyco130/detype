@@ -1,5 +1,5 @@
 import fs from "fs";
-import { transform, removeMagicComments } from "./transform";
+import { transform, removeMagicComments, RemoveTypeOptions } from "./transform";
 import { resolveConfig } from "prettier";
 
 const { readFile, writeFile } = fs.promises;
@@ -12,10 +12,14 @@ const { readFile, writeFile } = fs.promises;
 export async function transformFile(
 	inputFileName: string,
 	outputFileName: string,
+	options: RemoveTypeOptions = {},
 ): Promise<void> {
 	const code = await readFile(inputFileName, "utf-8");
-	const prettierConfig = await resolveConfig(inputFileName);
-	const output = await transform(code, inputFileName, prettierConfig);
+	const prettierOptions = await resolveConfig(inputFileName);
+	const output = await transform(code, inputFileName, {
+		prettierOptions,
+		...options,
+	});
 	await writeFile(outputFileName, output, "utf-8");
 }
 

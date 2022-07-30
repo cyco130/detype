@@ -53,6 +53,7 @@ describe("TypeScript to JavaScript conversion", () => {
 		expect(transformFile).toHaveBeenCalledWith(
 			"input.ts",
 			path.normalize("output/dir/output.js"),
+			{ removeTsComments: false },
 		);
 	});
 
@@ -69,7 +70,9 @@ describe("TypeScript to JavaScript conversion", () => {
 
 		await cli("file.ts");
 
-		expect(transformFile).toHaveBeenCalledWith("file.ts", "file.js");
+		expect(transformFile).toHaveBeenCalledWith("file.ts", "file.js", {
+			removeTsComments: false,
+		});
 	});
 
 	it("infers output file name .jsx", async () => {
@@ -85,7 +88,9 @@ describe("TypeScript to JavaScript conversion", () => {
 
 		await cli("file.tsx");
 
-		expect(transformFile).toHaveBeenCalledWith("file.tsx", "file.jsx");
+		expect(transformFile).toHaveBeenCalledWith("file.tsx", "file.jsx", {
+			removeTsComments: false,
+		});
 	});
 
 	it("rejects implicitly overwriting .vue files", async () => {
@@ -135,6 +140,7 @@ describe("TypeScript to JavaScript conversion", () => {
 		expect(transformFile).toHaveBeenCalledWith(
 			"file.ts",
 			path.normalize("output/dir/file.js"),
+			{ removeTsComments: false },
 		);
 	});
 
@@ -176,14 +182,43 @@ describe("TypeScript to JavaScript conversion", () => {
 		expect(transformFile).toHaveBeenCalledWith(
 			path.normalize("input-dir/one.ts"),
 			path.normalize("output/dir/one.js"),
+			{ removeTsComments: false },
 		);
 		expect(transformFile).toHaveBeenCalledWith(
 			path.normalize("input-dir/nested/two.tsx"),
 			path.normalize("output/dir/nested/two.jsx"),
+			{ removeTsComments: false },
 		);
 		expect(transformFile).toHaveBeenCalledWith(
 			path.normalize("input-dir/nested/deep/three.vue"),
 			path.normalize("output/dir/nested/deep/three.vue"),
+			{ removeTsComments: false },
+		);
+	});
+
+	it("honors --remove-ts-comments", async () => {
+		const { stat, mkdir } = (await import("fs")).default.promises;
+		const { transformFile } = await import("./transformFile");
+
+		vi.mocked(stat).mockResolvedValue({
+			isFile: vi.fn().mockReturnValue(true),
+			isDirectory: vi.fn().mockReturnValue(false),
+		} as any);
+
+		vi.mocked(mkdir).mockResolvedValue(undefined);
+
+		vi.mocked(transformFile).mockResolvedValue(undefined);
+
+		await cli("input.ts", "output/dir/output.js", "-t");
+
+		expect(mkdir).toHaveBeenLastCalledWith(path.normalize("output/dir"), {
+			recursive: true,
+		});
+
+		expect(transformFile).toHaveBeenCalledWith(
+			"input.ts",
+			path.normalize("output/dir/output.js"),
+			{ removeTsComments: true },
 		);
 	});
 });

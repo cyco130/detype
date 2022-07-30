@@ -21,3 +21,5 @@ const stringLiteral = "one\
 \
 two\
 ";
+
+const xxx = 3;

@@ -7,21 +7,52 @@ import pkg from "../package.json";
 const { stat, mkdir } = fs.promises;
 
 export async function cli(...args: string[]): Promise<boolean> {
-	const [flag] = args;
-	let [, input, output] = args;
-
-	if (!flag || flag === "-h" || flag === "--help") {
-		printUsage();
-		return !!flag;
+	let dashDash = false;
+	const params: string[] = [];
+	const flags: string[] = [];
+	for (const arg of args) {
+		if (arg === "--") {
+			dashDash = true;
+		} else if (dashDash || !arg.startsWith("-")) {
+			params.push(arg);
+		} else {
+			flags.push(arg);
+		}
 	}
 
-	if (flag === "-v" || flag === "--version") {
+	if (params.length > 2) {
+		console.error("Too many arguments");
+		return false;
+	}
+
+	let [input, output] = params;
+
+	if (
+		params.length === 0 ||
+		flags.some((flag) => flag === "-h" || flag === "--help")
+	) {
+		printUsage();
+		return params.length > 0;
+	}
+
+	if (flags.some((flag) => flag === "-v" || flag === "--version")) {
 		// eslint-disable-next-line no-console
 		console.log(VERSION);
 		return true;
 	}
 
-	const removeMagic = flag === "-m" || flag === "--remove-magic-comments";
+	const removeMagic = flags.some(
+		(flag) => flag === "-m" || flag === "--remove-magic-comments",
+	);
+	const removeTsComments = flags.some(
+		(flag) => flag === "-t" || flag === "--remove-ts-comments",
+	);
+
+	if (removeMagic && removeTsComments) {
+		console.warn(
+			"--remove-ts-comments has no effect when --remove-magic-comments is used",
+		);
+	}
 
 	if (!removeMagic) {
 		[input, output] = args;
@@ -57,7 +88,11 @@ export async function cli(...args: string[]): Promise<boolean> {
 						path.normalize(file),
 						path.normalize(outputName),
 				  )
-				: await transformFile(path.normalize(file), path.normalize(outputName));
+				: await transformFile(
+						path.normalize(file),
+						path.normalize(outputName),
+						{ removeTsComments },
+				  );
 		}
 
 		return true;
@@ -102,7 +137,9 @@ export async function cli(...args: string[]): Promise<boolean> {
 				path.normalize(input),
 				path.normalize(output),
 		  )
-		: await transformFile(path.normalize(input), path.normalize(output));
+		: await transformFile(path.normalize(input), path.normalize(output), {
+				removeTsComments,
+		  });
 
 	return true;
 
@@ -139,6 +176,9 @@ const USAGE = `Usage:
 
     OUTPUT  Output file or directory
       (optional if it can be inferred and won't it overwrite the source file)
+
+    -t, --remove-ts-comments
+      Remove @ts-ignore and @ts-expect-error comments
 
     -m, --remove-magic-comments
       Remove magic comments only, don't perform ts > js transform

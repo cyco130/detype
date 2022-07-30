@@ -33,11 +33,9 @@ describe("transformFile function", () => {
 
 		expect(resolveConfig).toHaveBeenCalledWith("input.ts");
 
-		expect(transform).toHaveBeenCalledWith(
-			"some text",
-			"input.ts",
-			"mock prettier config",
-		);
+		expect(transform).toHaveBeenCalledWith("some text", "input.ts", {
+			prettierOptions: "mock prettier config",
+		});
 
 		expect(writeFile).toHaveBeenCalledWith(
 			"output.js",
