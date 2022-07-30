@@ -90,23 +90,26 @@ console.log("Hello from TypeScript");
 ## CLI Usage
 
 ```
-detype [-m | --remove-magic-comments] <INPUT> [OUTPUT]
+  detype [-m | --remove-magic-comments] <INPUT> [OUTPUT]
 
-  INPUT   Input file or directory
+    INPUT   Input file or directory
 
-  OUTPUT  Output file or directory
-    (optional if it can be inferred and it won't overwrite the source file)
+    OUTPUT  Output file or directory
+      (optional if it can be inferred and it won't overwrite the source file)
 
-  -m, --remove-magic-comments
-    Remove magic comments only, don't perform ts > js transform
+    -t, --remove-ts-comments
+      Remove @ts-ignore and @ts-expect-error comments
 
-detype [-v | --version]
+    -m, --remove-magic-comments
+      Remove magic comments only, don't perform ts > js transform
 
-  Print version and exit
+  detype [-v | --version]
 
-detype [-h | --help]
+    Print version and exit
 
-  Print this help and exit
+  detype [-h | --help]
+
+    Print this help and exit
 ```
 
 ## Node API
@@ -146,6 +149,11 @@ export function removeMagicCommentsFromFile(
 ```
 
 ## Change log
+
+### 0.6
+
+- feature: Option to remove @ts-ignore and @ts-expect-error comments
+- fix: Preserve newline runs (especially in template literals!)
 
 ### 0.5
 

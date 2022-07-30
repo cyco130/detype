@@ -175,7 +175,7 @@ const USAGE = `Usage:
     INPUT   Input file or directory
 
     OUTPUT  Output file or directory
-      (optional if it can be inferred and won't it overwrite the source file)
+      (optional if it can be inferred and it won't overwrite the source file)
 
     -t, --remove-ts-comments
       Remove @ts-ignore and @ts-expect-error comments
