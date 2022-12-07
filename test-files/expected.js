@@ -17,7 +17,8 @@ const templateLiteral = `one
 two
 `;
 
-const stringLiteral = "one\
+const stringLiteral =
+  "one\
 \
 two\
 ";

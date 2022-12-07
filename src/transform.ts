@@ -52,7 +52,7 @@ export async function transform(
 	code = code.replaceAll("\r\n", "\n");
 
 	if (fileName.endsWith(".vue")) {
-		const parsedVue = parseVueSfc(code, { filename: fileName });
+		const parsedVue = parseVueSfc(code);
 
 		if (
 			parsedVue.descriptor.script?.lang !== "ts" &&
