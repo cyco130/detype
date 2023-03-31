@@ -1,4 +1,7 @@
-import { transformAsync } from "@babel/core";
+import {
+	transformAsync,
+	TransformOptions as BabelTransformOptions,
+} from "@babel/core";
 import type { VisitNodeObject, Node } from "@babel/traverse";
 import { format } from "prettier";
 import {
@@ -26,6 +29,8 @@ type VueElementNode = VueSfcTemplateBlock["ast"];
 export interface RemoveTypeOptions {
 	/** Whether to remove ts-ignore and ts-expect-error comments */
 	removeTsComments?: boolean;
+	/** Escape hatch for customizing Babel configuration */
+	customizeBabelConfig?(config: BabelTransformOptions): void;
 }
 
 export interface TransformOptions extends RemoveTypeOptions {
@@ -136,7 +141,7 @@ async function removeTypes(
 		},
 	};
 
-	const babelOutput = await transformAsync(code, {
+	const babelConfig: BabelTransformOptions = {
 		filename: fileName,
 		retainLines: true,
 		plugins: [
@@ -159,7 +164,13 @@ async function removeTypes(
 				(!options.removeTsComments ||
 					!comment.match(/^\s*(@ts-ignore|@ts-expect-error)/)),
 		},
-	});
+	};
+
+	if (options.customizeBabelConfig) {
+		options.customizeBabelConfig(babelConfig);
+	}
+
+	const babelOutput = await transformAsync(code, babelConfig);
 
 	if (
 		!babelOutput ||
