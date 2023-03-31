@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import { removeMagicCommentsFromFile, transformFile } from "./transformFile";
 import glob from "fast-glob";
 import pkg from "../package.json";

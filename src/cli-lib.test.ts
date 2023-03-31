@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { cli } from "./cli-lib";
 
@@ -32,7 +32,7 @@ afterEach(() => {
 
 describe("TypeScript to JavaScript conversion", () => {
 	it("honors input file and output file", async () => {
-		const { stat, mkdir } = (await import("fs")).default.promises;
+		const { stat, mkdir } = (await import("node:fs")).default.promises;
 		const { transformFile } = await import("./transformFile");
 
 		vi.mocked(stat).mockResolvedValue({
@@ -58,7 +58,7 @@ describe("TypeScript to JavaScript conversion", () => {
 	});
 
 	it("infers output file name .js", async () => {
-		const { stat } = (await import("fs")).default.promises;
+		const { stat } = (await import("node:fs")).default.promises;
 		const { transformFile } = await import("./transformFile");
 
 		vi.mocked(stat).mockResolvedValue({
@@ -76,7 +76,7 @@ describe("TypeScript to JavaScript conversion", () => {
 	});
 
 	it("infers output file name .jsx", async () => {
-		const { stat } = (await import("fs")).default.promises;
+		const { stat } = (await import("node:fs")).default.promises;
 		const { transformFile } = await import("./transformFile");
 
 		vi.mocked(stat).mockResolvedValue({
@@ -94,7 +94,7 @@ describe("TypeScript to JavaScript conversion", () => {
 	});
 
 	it("rejects implicitly overwriting .vue files", async () => {
-		const { stat, mkdir } = (await import("fs")).default.promises;
+		const { stat, mkdir } = (await import("node:fs")).default.promises;
 
 		vi.mocked(stat).mockResolvedValue({
 			isFile: vi.fn().mockReturnValue(true),
@@ -110,7 +110,7 @@ describe("TypeScript to JavaScript conversion", () => {
 	});
 
 	it("infers output file name from directory", async () => {
-		const { stat, mkdir } = (await import("fs")).default.promises;
+		const { stat, mkdir } = (await import("node:fs")).default.promises;
 		const { transformFile } = await import("./transformFile");
 
 		vi.mocked(stat as any).mockImplementation(async (name: string) => {
@@ -145,7 +145,7 @@ describe("TypeScript to JavaScript conversion", () => {
 	});
 
 	it("walks the file system", async () => {
-		const { stat, mkdir } = (await import("fs")).default.promises;
+		const { stat, mkdir } = (await import("node:fs")).default.promises;
 		const { transformFile } = await import("./transformFile");
 		const glob = (await import("fast-glob")).default;
 
@@ -197,7 +197,7 @@ describe("TypeScript to JavaScript conversion", () => {
 	});
 
 	it("honors --remove-ts-comments", async () => {
-		const { stat, mkdir } = (await import("fs")).default.promises;
+		const { stat, mkdir } = (await import("node:fs")).default.promises;
 		const { transformFile } = await import("./transformFile");
 
 		vi.mocked(stat).mockResolvedValue({
@@ -225,7 +225,7 @@ describe("TypeScript to JavaScript conversion", () => {
 
 describe("TypeScript magic comment removal", () => {
 	it("honors input file and output file", async () => {
-		const { stat, mkdir } = (await import("fs")).default.promises;
+		const { stat, mkdir } = (await import("node:fs")).default.promises;
 		const { removeMagicCommentsFromFile } = await import("./transformFile");
 
 		vi.mocked(stat).mockResolvedValue({
@@ -250,7 +250,7 @@ describe("TypeScript magic comment removal", () => {
 	});
 
 	it("rejects when output file name is not given", async () => {
-		const { stat, mkdir } = (await import("fs")).default.promises;
+		const { stat, mkdir } = (await import("node:fs")).default.promises;
 		vi.mocked(stat).mockResolvedValue({
 			isFile: vi.fn().mockReturnValue(true),
 			isDirectory: vi.fn().mockReturnValue(false),
@@ -265,7 +265,7 @@ describe("TypeScript magic comment removal", () => {
 	});
 
 	it("infers output file name from directory", async () => {
-		const { stat, mkdir } = (await import("fs")).default.promises;
+		const { stat, mkdir } = (await import("node:fs")).default.promises;
 		const { removeMagicCommentsFromFile } = await import("./transformFile");
 
 		vi.mocked(stat as any).mockImplementation(async (name: string) => {
@@ -299,7 +299,7 @@ describe("TypeScript magic comment removal", () => {
 	});
 
 	it("walks the file system", async () => {
-		const { stat, mkdir } = (await import("fs")).default.promises;
+		const { stat, mkdir } = (await import("node:fs")).default.promises;
 		const { removeMagicCommentsFromFile } = await import("./transformFile");
 		const glob = (await import("fast-glob")).default;
 

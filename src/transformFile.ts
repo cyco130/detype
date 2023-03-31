@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs from "node:fs";
 import { transform, removeMagicComments, RemoveTypeOptions } from "./transform";
 import { resolveConfig } from "prettier";
 

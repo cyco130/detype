@@ -24,27 +24,28 @@
 		"index.d.ts"
 	],
 	"dependencies": {
-		"@babel/core": "^7.20.5",
-		"@babel/preset-typescript": "^7.18.6",
+		"@babel/core": "^7.21.4",
+		"@babel/preset-typescript": "^7.21.4",
+		"@vue/compiler-dom": "^3.2.47",
 		"@vuedx/compiler-sfc": "0.7.1",
 		"@vuedx/template-ast-types": "0.7.1",
 		"fast-glob": "^3.2.12",
-		"prettier": "^2.8.0",
+		"prettier": "^2.8.7",
 		"string.prototype.replaceall": "^1.0.7"
 	},
 	"devDependencies": {
-		"@babel/traverse": "^7.20.5",
-		"@cyco130/eslint-config": "^2.1.2",
-		"@types/babel__core": "^7.1.20",
+		"@babel/traverse": "^7.21.4",
+		"@cyco130/eslint-config": "^3.0.2",
+		"@types/babel__core": "^7.20.0",
 		"@types/babel__traverse": "^7.18.3",
-		"@types/node": "18.11.11",
-		"@types/prettier": "^2.7.1",
-		"eslint": "^8.29.0",
+		"@types/node": "18.15.11",
+		"@types/prettier": "^2.7.2",
+		"eslint": "^8.37.0",
 		"npm-run-all": "^4.1.5",
-		"rimraf": "^3.0.2",
-		"tsup": "^6.5.0",
-		"typescript": "^4.9.3",
-		"vitest": "0.25.5"
+		"rimraf": "^4.4.1",
+		"tsup": "^6.7.0",
+		"typescript": "^5.0.3",
+		"vitest": "0.29.8"
 	},
 	"repository": {
 		"type": "git",

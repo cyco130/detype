@@ -23,7 +23,7 @@ vi.mock("./transform", () => ({
 
 describe("transformFile function", () => {
 	it("transforms file", async () => {
-		const { readFile, writeFile } = (await import("fs")).default.promises;
+		const { readFile, writeFile } = (await import("node:fs")).default.promises;
 		const { resolveConfig } = await import("prettier");
 		const { transform } = await import("./transform");
 
@@ -47,7 +47,7 @@ describe("transformFile function", () => {
 
 describe("removeMagicCommentsFromFile function", () => {
 	it("removes magic comments", async () => {
-		const { readFile, writeFile } = (await import("fs")).default.promises;
+		const { readFile, writeFile } = (await import("node:fs")).default.promises;
 		const { resolveConfig } = await import("prettier");
 		const { removeMagicComments } = await import("./transform");
 

@@ -4,8 +4,8 @@ import {
 	processMagicComments,
 	removeMagicComments,
 } from "./transform";
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 
 async function readFile(fileName: string): Promise<string> {
 	return fs.promises
