@@ -14,28 +14,20 @@ p {
 }
 </style>
 
-<script lang="ts">
+<script>
 console.log("This is the non-setup script");
 </script>
 
-<script lang="ts" setup>
+<script setup>
 import MyComponent from "MyComponent.vue";
 import { someConst, otherConst } from "some-module";
-import type { ParsedPath } from "path";
 
-let x: string;
+let x;
 
 // This comment should be kept
 
-// This comment should be deleted
-// Ditto for this
-interface Foo {
-  // This should go too
-  bar: number;
-}
-
 // This comment should also be kept
-export function bar(foo: Foo): Date {
+export function bar(foo) {
   return new Date();
 }
 
