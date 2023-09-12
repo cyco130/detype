@@ -1,8 +1,6 @@
 import {
 	transformAsync,
 	TransformOptions as BabelTransformOptions,
-	parseSync,
-	traverse,
 } from "@babel/core";
 import type { VisitNodeObject, Node } from "@babel/traverse";
 import { format } from "prettier";
@@ -211,14 +209,9 @@ async function removeTypesFromVueSfcScript(
 		traverseVueAst(templateAst, {
 			enter(node) {
 				if (isVueSimpleExpressionNode(node) && !node.isStatic) {
-					const content = node.content.trim();
+					const content = node.content;
 					if (content.startsWith("{") && content.endsWith("}")) {
-						const ast = parseSync("export default " + content);
-						traverse(ast, {
-							Identifier(path) {
-								expressions.add(path.node.name);
-							},
-						});
+						expressions.add(`[${content}]`);
 					} else {
 						expressions.add(content);
 					}

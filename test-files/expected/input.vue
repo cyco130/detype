@@ -2,8 +2,8 @@
   <div>
     <p>Hello {{ someConst }}!</p>
     <MyComponent v-bind:prop="someConst" v-custom:[someConst]="otherConst" />
-    <div v-bind="{ ...props }"></div>
-    <div v-bind="{ ...props, ...otherProps }"></div>
+    <div v-bind="{ ...props }" :array="[...arr1]"></div>
+    <div v-bind="{ ...props, ...otherProps }" :array="[...arr1, ...arr2]"></div>
     <div v-bind="{ parentProps: props }"></div>
   </div>
 </template>
@@ -32,4 +32,6 @@ export function bar(foo) {
 }
 
 const otherProps = {};
+const arr1 = [];
+const arr2 = [];
 </script>
