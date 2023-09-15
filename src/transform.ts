@@ -209,14 +209,9 @@ async function removeTypesFromVueSfcScript(
 		traverseVueAst(templateAst, {
 			enter(node) {
 				if (isVueSimpleExpressionNode(node) && !node.isStatic) {
-					const content = node.content.trim();
-					if (content.startsWith("{") && content.endsWith("}")) {
-						expressions.add(`[${content}]`);
-					} else {
-						expressions.add(content);
-					}
+					expressions.add(`[${node.content}]`);
 				} else if (isVueComponentNode(node)) {
-					expressions.add(node.tag);
+					expressions.add(`[${node.tag}]`);
 				}
 			},
 		});
