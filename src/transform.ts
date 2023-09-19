@@ -209,15 +209,14 @@ async function removeTypesFromVueSfcScript(
 		traverseVueAst(templateAst, {
 			enter(node) {
 				if (isVueSimpleExpressionNode(node) && !node.isStatic) {
-					expressions.add(node.content);
+					expressions.add(`[${node.content}]`);
 				} else if (isVueComponentNode(node)) {
-					expressions.add(node.tag);
+					expressions.add(`[${node.tag}]`);
 				}
 			},
 		});
 
 		// We'll simply add them at the end of the template
-
 		script.content +=
 			"/* @detype: remove-after-this */" + [...expressions].join(";");
 	}

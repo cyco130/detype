@@ -29,11 +29,9 @@ describe("transform function", () => {
 	it("transforms Vue file", async () => {
 		const input = await readFile("../test-files/input.vue");
 
-		const expected = await readFile("../test-files/expected.vue");
-
 		const output = await transform(input, "input.vue");
 
-		expect(output).toBe(expected);
+		expect(output).toMatchFileSnapshot("../test-files/expected/input.vue");
 	});
 
 	it("processes magic comments", async () => {
