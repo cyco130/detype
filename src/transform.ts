@@ -93,7 +93,7 @@ export async function transform(
 
 		const isContainsDefinePropsType =
 			script2?.content.match(/defineProps\s*</m);
-		const isContainsDefineEmitType = script2?.content.match(/defineProps\s*</m);
+		const isContainsDefineEmitType = script2?.content.match(/defineEmits\s*</m);
 
 		if (isContainsDefinePropsType || isContainsDefineEmitType) {
 			const { content } = compileScript(parsedVue.descriptor as any, {
