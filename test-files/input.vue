@@ -23,6 +23,16 @@ import MyComponent from "MyComponent.vue";
 import { someConst, otherConst } from "some-module";
 import type { ParsedPath } from "path";
 
+const props = defineProps<{
+  prop: string;
+  array: string[];
+}>();
+
+const emit = defineEmits<{
+  (e: "change", id: number): void;
+  (e: "update", value: string): void;
+}>();
+
 let x: string;
 
 // This comment should be kept
@@ -35,10 +45,9 @@ interface Foo {
 }
 
 // This comment should also be kept
-export function bar(foo: Foo): Date {
-  return new Date();
-}
-
+defineExpose({
+  foo: "bar",
+});
 const otherProps = {};
 const arr1: number[] = [];
 const arr2: string[] = [];

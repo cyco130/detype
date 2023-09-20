@@ -27,6 +27,7 @@
 		"@babel/core": "^7.21.4",
 		"@babel/preset-typescript": "^7.21.4",
 		"@vue/compiler-dom": "^3.2.47",
+		"@vue/compiler-sfc": "^3.2.47",
 		"@vuedx/compiler-sfc": "0.7.1",
 		"@vuedx/template-ast-types": "0.7.1",
 		"fast-glob": "^3.2.12",
