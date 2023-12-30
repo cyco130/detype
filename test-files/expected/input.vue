@@ -22,15 +22,21 @@ console.log("This is the non-setup script");
 import MyComponent from "MyComponent.vue";
 import { someConst, otherConst } from "some-module";
 
+const props = defineProps({
+  prop: { type: String, required: true },
+  array: { type: Array, required: true },
+});
+
+const emit = defineEmits(["change", "update"]);
+
 let x;
 
 // This comment should be kept
 
 // This comment should also be kept
-export function bar(foo) {
-  return new Date();
-}
-
+defineExpose({
+  foo: "bar",
+});
 const otherProps = {};
 const arr1 = [];
 const arr2 = [];

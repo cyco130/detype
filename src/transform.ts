@@ -9,6 +9,7 @@ import {
 	SFCTemplateBlock as VueSfcTemplateBlock,
 	SFCScriptBlock as VueSfcScriptBlock,
 } from "@vuedx/compiler-sfc";
+import { compileScript } from "@vue/compiler-sfc";
 import {
 	traverse as traverseVueAst,
 	isSimpleExpressionNode as isVueSimpleExpressionNode,
@@ -23,6 +24,25 @@ import babelTs from "@babel/preset-typescript";
 // @ts-expect-error: No typinggs
 import { shim } from "string.prototype.replaceall";
 shim();
+
+function getDefinePropsObject(content: string) {
+	const matched = /\sprops:\s*\{/m.exec(content);
+	if (matched) {
+		const startContentIndex = matched.index + matched[0].length - 1;
+		let leftBracketCount = 1;
+		let endContentIndex = startContentIndex + 1;
+		while (leftBracketCount) {
+			if (content.charAt(endContentIndex) === "{") {
+				leftBracketCount++;
+			} else if (content.charAt(endContentIndex) === "}") {
+				leftBracketCount--;
+			}
+			endContentIndex++;
+		}
+		return content.substring(startContentIndex, endContentIndex);
+	}
+	return "";
+}
 
 type VueElementNode = VueSfcTemplateBlock["ast"];
 
@@ -53,6 +73,8 @@ export async function transform(
 
 	const originalCode = code;
 	const originalFileName = fileName;
+	let propsContent = "";
+	let emitsContent = "";
 
 	code = code.replaceAll("\r\n", "\n");
 
@@ -68,6 +90,23 @@ export async function transform(
 		}
 
 		let { script: script1, scriptSetup: script2 } = parsedVue.descriptor;
+
+		const isContainsDefinePropsType =
+			script2?.content.match(/defineProps\s*</m);
+		const isContainsDefineEmitType = script2?.content.match(/defineEmits\s*</m);
+
+		if (isContainsDefinePropsType || isContainsDefineEmitType) {
+			const { content } = compileScript(parsedVue.descriptor as any, {
+				id: "xxxxxxx",
+			});
+
+			if (isContainsDefinePropsType) {
+				propsContent = getDefinePropsObject(content);
+			}
+			if (isContainsDefineEmitType) {
+				emitsContent = content.match(/\semits:\s(\[.*\]?)/m)?.[1] || "";
+			}
+		}
 
 		// Process the second script first to simplify code location handling
 		if (
@@ -95,6 +134,13 @@ export async function transform(
 		);
 	} else {
 		code = await removeTypes(code, fileName, removeTypeOptions);
+	}
+
+	if (propsContent) {
+		code = code.replace("defineProps(", (str) => `${str}${propsContent}`);
+	}
+	if (emitsContent) {
+		code = code.replace("defineEmits(", (str) => `${str}${emitsContent}`);
 	}
 
 	code = format(code, {
