@@ -31,7 +31,9 @@ describe("transform function", () => {
 
 		const output = await transform(input, "input.vue");
 
-		expect(output).toMatchFileSnapshot("../test-files/expected/input.vue");
+		await expect(output).toMatchFileSnapshot(
+			"../test-files/expected/input.vue",
+		);
 	});
 
 	it("processes magic comments", async () => {
@@ -45,7 +47,7 @@ describe("transform function", () => {
 
 		const expected = await readFile("../test-files/expected.ts");
 
-		const output = removeMagicComments(input, "input.ts");
+		const output = await removeMagicComments(input, "input.ts");
 
 		expect(output).toBe(expected);
 	});

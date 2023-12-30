@@ -143,7 +143,7 @@ export async function transform(
 		code = code.replace("defineEmits(", (str) => `${str}${emitsContent}`);
 	}
 
-	code = format(code, {
+	code = await format(code, {
 		...prettierOptions,
 		filepath: originalFileName,
 	});
@@ -328,11 +328,11 @@ export function processMagicComments(input: string): string {
  * @param fileName        File name for the source
  * @param prettierOptions Options to pass to prettier
  */
-export function removeMagicComments(
+export async function removeMagicComments(
 	code: string,
 	fileName: string,
 	prettierOptions?: PrettierOptions | null,
-): string {
+): Promise<string> {
 	const REPLACE_COMMENT = "// @detype: replace\n";
 	const WITH_COMMENT = "// @detype: with\n";
 	const END_COMMENT = "// @detype: end\n";
@@ -359,7 +359,7 @@ export function removeMagicComments(
 		startEnd = start + REPLACE_COMMENT.length;
 	}
 
-	code = format(code, {
+	code = await format(code, {
 		...prettierOptions,
 		filepath: fileName,
 	});

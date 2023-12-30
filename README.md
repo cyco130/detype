@@ -132,23 +132,28 @@ function transformFile(
 ): Promise<void>;
 
 // Remove magic comments without performing the TS to JS transform
-export function removeMagicComments(
+export async function removeMagicComments(
 	// Source code
 	code: string,
 	// File name for the source
 	fileName: string,
 	// Options to pass to prettier
 	prettierOptions?: PrettierOptions | null,
-): string;
+): Promise<string>;
 
 // Remove magic comments from the input file and write the output to another file
-export function removeMagicCommentsFromFile(
+export async function removeMagicCommentsFromFile(
 	inputFileName: string,
 	outputFileName: string,
 ): Promise<void>;
 ```
 
 ## Change log
+
+### 1.0
+
+- BREAKING CHANGE: `removeMagicComments` is now async due to Prettier's API change
+- feat: support transform defineProps's and defineEmits's types to parameters ([PR by Dunqing](https://github.com/cyco130/detype/pull/11))
 
 ### 0.6
 

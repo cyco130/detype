@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { removeMagicCommentsFromFile, transformFile } from "./transformFile";
-import glob from "fast-glob";
+import fastGlob from "fast-glob";
 import pkg from "../package.json";
 
 const { stat, mkdir } = fs.promises;
@@ -67,9 +67,9 @@ export async function cli(...args: string[]): Promise<boolean> {
 			return false;
 		}
 
-		const files = (await glob(unixify(input + "/**/*.{ts,tsx,vue}"))).filter(
-			(file) => !file.endsWith(".d.ts"),
-		);
+		const files = (
+			await fastGlob(unixify(input + "/**/*.{ts,tsx,vue}"))
+		).filter((file) => !file.endsWith(".d.ts"));
 		const dirs = [...new Set(files.map((file) => path.dirname(file)))].sort();
 
 		await mkdir(path.normalize(output), { recursive: true });
@@ -87,12 +87,12 @@ export async function cli(...args: string[]): Promise<boolean> {
 				? await removeMagicCommentsFromFile(
 						path.normalize(file),
 						path.normalize(outputName),
-				  )
+					)
 				: await transformFile(
 						path.normalize(file),
 						path.normalize(outputName),
 						{ removeTsComments },
-				  );
+					);
 		}
 
 		return true;
@@ -136,10 +136,10 @@ export async function cli(...args: string[]): Promise<boolean> {
 		? await removeMagicCommentsFromFile(
 				path.normalize(input),
 				path.normalize(output),
-		  )
+			)
 		: await transformFile(path.normalize(input), path.normalize(output), {
 				removeTsComments,
-		  });
+			});
 
 	return true;
 
