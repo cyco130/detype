@@ -4,9 +4,6 @@
 	"description": "Removes TypeScript type annotations but keeps the formatting",
 	"main": "dist/index.js",
 	"bin": "detype.js",
-	"engines": {
-		"node": ">=14.19.3"
-	},
 	"scripts": {
 		"prepack": "rimraf dist && pnpm build",
 		"build": "tsup",
