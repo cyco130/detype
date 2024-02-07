@@ -8,7 +8,7 @@
 		"moduleResolution": "node",
 		"types": ["node"],
 		"skipLibCheck": true,
-		"resolveJsonModule": true,
+		"resolveJsonModule": true
 	},
-	"include": ["src/**/*.ts"],
+	"include": ["src/**/*.ts"]
 }
