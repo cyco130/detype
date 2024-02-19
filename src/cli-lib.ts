@@ -58,6 +58,12 @@ export async function cli(...args: string[]): Promise<boolean> {
 		[input, output] = args;
 	}
 
+	if (!input) {
+		console.error("No input file or directory given");
+		printUsage();
+		return false;
+	}
+
 	const inputStat = await stat(input);
 
 	if (inputStat.isDirectory()) {

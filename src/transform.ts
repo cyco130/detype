@@ -172,7 +172,7 @@ async function removeTypes(
 			if (!p.node.leadingComments) return;
 
 			for (let i = p.node.leadingComments.length - 1; i >= 0; i--) {
-				const comment = p.node.leadingComments[i];
+				const comment = p.node.leadingComments[i]!;
 
 				if (
 					code.slice(comment.end).match(/^\s*\n\s*\n/) ||
@@ -284,7 +284,7 @@ async function removeTypesFromVueSfcScript(
 	const matches = before.match(/\blang\s*=\s*["']ts["']/);
 
 	if (matches) {
-		const lastMatch = matches[matches.length - 1];
+		const lastMatch = matches[matches.length - 1]!;
 		const lastMatchIndex = before.lastIndexOf(lastMatch);
 		before =
 			before.slice(0, lastMatchIndex) +
