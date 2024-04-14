@@ -83,10 +83,6 @@ If you just want to remove the magic comments, you can use the `-m` CLI flag or 
 console.log("Hello from TypeScript");
 ```
 
-## System requirements
-
-`detype` requires Node version 14.19.3 or later.
-
 ## CLI Usage
 
 ```
