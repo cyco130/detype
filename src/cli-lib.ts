@@ -89,16 +89,16 @@ export async function cli(...args: string[]): Promise<boolean> {
 		for (const file of files) {
 			const inputDir = path.dirname(path.relative(input, file));
 			const outputName = inferName(file, path.join(output, inputDir));
-			removeMagic
-				? await removeMagicCommentsFromFile(
-						path.normalize(file),
-						path.normalize(outputName),
-					)
-				: await transformFile(
-						path.normalize(file),
-						path.normalize(outputName),
-						{ removeTsComments },
-					);
+			if (removeMagic) {
+				await removeMagicCommentsFromFile(
+					path.normalize(file),
+					path.normalize(outputName),
+				);
+			} else {
+				await transformFile(path.normalize(file), path.normalize(outputName), {
+					removeTsComments,
+				});
+			}
 		}
 
 		return true;
@@ -138,14 +138,16 @@ export async function cli(...args: string[]): Promise<boolean> {
 		await mkdir(path.normalize(outputDir), { recursive: true });
 	}
 
-	removeMagic
-		? await removeMagicCommentsFromFile(
-				path.normalize(input),
-				path.normalize(output),
-			)
-		: await transformFile(path.normalize(input), path.normalize(output), {
-				removeTsComments,
-			});
+	if (removeMagic) {
+		await removeMagicCommentsFromFile(
+			path.normalize(input),
+			path.normalize(output),
+		);
+	} else {
+		await transformFile(path.normalize(input), path.normalize(output), {
+			removeTsComments,
+		});
+	}
 
 	return true;
 
