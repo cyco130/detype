@@ -1,6 +1,6 @@
 {
 	"name": "detype",
-	"version": "1.0.11",
+	"version": "1.0.12",
 	"description": "Removes TypeScript type annotations but keeps the formatting",
 	"main": "dist/index.js",
 	"bin": "detype.js",
