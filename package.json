@@ -24,8 +24,8 @@
 		"@babel/core": "^7.25.2",
 		"@babel/preset-typescript": "^7.24.7",
 		"@babel/traverse": "^7.25.6",
-		"@vue/compiler-dom": "^3.5.3",
-		"@vue/compiler-sfc": "^3.5.3",
+		"@vue/compiler-dom": "^3.5.5",
+		"@vue/compiler-sfc": "^3.5.5",
 		"@vuedx/compiler-sfc": "0.7.1",
 		"@vuedx/template-ast-types": "0.7.1",
 		"fast-glob": "^3.3.2",
@@ -33,15 +33,15 @@
 		"string.prototype.replaceall": "^1.0.10"
 	},
 	"devDependencies": {
-		"@cyco130/eslint-config": "^3.9.5",
+		"@cyco130/eslint-config": "^3.9.6",
 		"@types/babel__core": "^7.20.5",
 		"@types/babel__traverse": "^7.20.6",
-		"@types/node": "22.5.4",
+		"@types/node": "22.5.5",
 		"eslint": "^8.57.0",
 		"rimraf": "^6.0.1",
 		"tsup": "^8.2.4",
-		"typescript": "^5.5.4",
-		"vitest": "2.0.5"
+		"typescript": "^5.6.2",
+		"vitest": "2.1.1"
 	},
 	"repository": {
 		"type": "git",
