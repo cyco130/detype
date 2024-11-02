@@ -2,7 +2,19 @@
 	"name": "detype",
 	"version": "1.0.12",
 	"description": "Removes TypeScript type annotations but keeps the formatting",
-	"main": "dist/index.js",
+	"type": "module",
+	"exports": {
+		".": {
+			"import": {
+				"types": "./dist/index.d.ts",
+				"default": "./dist/index.js"
+			},
+			"require": {
+				"types": "./dist/index.d.cts",
+				"default": "./dist/index.cjs"
+			}
+		}
+	},
 	"bin": "detype.js",
 	"scripts": {
 		"prepack": "rimraf dist && pnpm build",
@@ -21,11 +33,11 @@
 		"index.d.ts"
 	],
 	"dependencies": {
-		"@babel/core": "^7.25.2",
-		"@babel/preset-typescript": "^7.24.7",
-		"@babel/traverse": "^7.25.6",
-		"@vue/compiler-dom": "^3.5.5",
-		"@vue/compiler-sfc": "^3.5.5",
+		"@babel/core": "^7.26.0",
+		"@babel/preset-typescript": "^7.26.0",
+		"@babel/traverse": "^7.25.9",
+		"@vue/compiler-dom": "^3.5.12",
+		"@vue/compiler-sfc": "^3.5.12",
 		"@vuedx/compiler-sfc": "0.7.1",
 		"@vuedx/template-ast-types": "0.7.1",
 		"fast-glob": "^3.3.2",
@@ -33,15 +45,15 @@
 		"string.prototype.replaceall": "^1.0.10"
 	},
 	"devDependencies": {
-		"@cyco130/eslint-config": "^3.9.6",
+		"@cyco130/eslint-config": "^5.0.0",
 		"@types/babel__core": "^7.20.5",
 		"@types/babel__traverse": "^7.20.6",
-		"@types/node": "22.5.5",
-		"eslint": "^8.57.0",
+		"@types/node": "22.8.6",
+		"eslint": "^9.14.0",
 		"rimraf": "^6.0.1",
-		"tsup": "^8.2.4",
-		"typescript": "^5.6.2",
-		"vitest": "2.1.1"
+		"tsup": "^8.3.5",
+		"typescript": "^5.6.3",
+		"vitest": "2.1.4"
 	},
 	"repository": {
 		"type": "git",

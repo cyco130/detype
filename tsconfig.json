@@ -1,5 +1,6 @@
 {
 	"compilerOptions": {
+		"noEmit": true,
 		"strict": true,
 		"module": "ES2020",
 		"lib": ["ES2020", "ES2021.String"],
@@ -9,6 +10,8 @@
 		"types": ["node"],
 		"skipLibCheck": true,
 		"resolveJsonModule": true,
-		"noUncheckedIndexedAccess": true
-	}
+		"noUncheckedIndexedAccess": true,
+		"checkJs": true
+	},
+	"exclude": ["node_modules", "dist", "detype.js"]
 }
