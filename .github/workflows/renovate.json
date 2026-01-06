@@ -15,5 +15,5 @@
 			"allowedVersions": "20"
 		}
 	],
-	"ignoreDeps": []
+	"ignoreDeps": ["@vuedx/compiler-sfc", "@vuedx/template-ast-types"]
 }
