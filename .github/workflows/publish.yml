@@ -55,7 +55,7 @@ jobs:
           git config --global user.email "<>"
 
       - name: Bump version
-        run: "./version ${{ github.event.inputs.version }}"
+        run: "pnpm version ${{ github.event.inputs.version }} --no-git-tag-version"
 
       - name: "Publish to NPM"
         run: pnpm -r publish --provenance --access public --no-git-checks --tag ${{ github.event.inputs.tag }}
