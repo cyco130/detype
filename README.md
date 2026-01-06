@@ -146,6 +146,10 @@ export async function removeMagicCommentsFromFile(
 
 ## Change log
 
+### 2.0
+
+- BREAKING CHANGE: Drop support for Node < 20
+
 ### 1.0
 
 - BREAKING CHANGE: `removeMagicComments` is now async due to Prettier's API change
