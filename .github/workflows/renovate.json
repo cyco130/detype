@@ -7,6 +7,10 @@
 	"rangeStrategy": "bump",
 	"packageRules": [
 		{
+			"matchManagers": ["github-actions"],
+			"rangeStrategy": "replace"
+		},
+		{
 			"depTypeList": ["peerDependencies"],
 			"enabled": false
 		},
