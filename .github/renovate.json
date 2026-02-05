@@ -1,6 +1,6 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
-	"extends": ["config:base", "schedule:weekly", "group:allNonMajor"],
+	"extends": ["config:recommended", "schedule:weekly", "group:allNonMajor"],
 	"ignorePresets": ["ignorePaths"],
 	"ignorePaths": ["**/node_modules/**", "**/dist/**"],
 	"labels": ["dependencies"],
@@ -11,12 +11,12 @@
 			"rangeStrategy": "replace"
 		},
 		{
-			"depTypeList": ["peerDependencies"],
+			"matchDepTypes": ["peerDependencies"],
 			"enabled": false
 		},
 		{
-			"matchPackagePatterns": ["^@types/node$"],
-			"allowedVersions": "20"
+			"allowedVersions": "20",
+			"matchPackageNames": ["/^@types/node$/"]
 		}
 	],
 	"ignoreDeps": ["@vuedx/compiler-sfc", "@vuedx/template-ast-types"]
