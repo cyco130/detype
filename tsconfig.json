@@ -13,5 +13,5 @@
 		"noUncheckedIndexedAccess": true,
 		"checkJs": true
 	},
-	"exclude": ["node_modules", "dist", "detype.js"]
+	"exclude": ["node_modules", "dist"]
 }

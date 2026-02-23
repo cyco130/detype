@@ -3,3 +3,5 @@ dist
 *.log
 .vscode
 coverage
+*.local.*
+*.tgz
