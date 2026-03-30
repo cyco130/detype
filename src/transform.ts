@@ -1,13 +1,13 @@
 import {
 	transformAsync,
-	TransformOptions as BabelTransformOptions,
+	type TransformOptions as BabelTransformOptions,
 } from "@babel/core";
 import type { VisitNodeObject, Node } from "@babel/traverse";
 import { format } from "prettier";
 import {
 	parse as parseVueSfc,
-	SFCTemplateBlock as VueSfcTemplateBlock,
-	SFCScriptBlock as VueSfcScriptBlock,
+	type SFCTemplateBlock as VueSfcTemplateBlock,
+	type SFCScriptBlock as VueSfcScriptBlock,
 } from "@vuedx/compiler-sfc";
 import { compileScript } from "@vue/compiler-sfc";
 import {
