@@ -1,5 +1,9 @@
 import fs from "node:fs";
-import { transform, removeMagicComments, RemoveTypeOptions } from "./transform";
+import {
+	transform,
+	removeMagicComments,
+	type RemoveTypeOptions,
+} from "./transform";
 import { resolveConfig } from "prettier";
 
 const { readFile, writeFile } = fs.promises;

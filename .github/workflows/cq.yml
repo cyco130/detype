@@ -38,5 +38,8 @@ jobs:
       - name: Install
         run: pnpm install
 
+      - name: Build
+        run: pnpm build
+
       - name: Run code quality checks and tests
         run: pnpm run test:cq
