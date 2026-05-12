@@ -46,7 +46,7 @@
     "prettier": "^3.8.3"
   },
   "devDependencies": {
-    "@cyco130/eslint-config": "^8.0.0",
+    "@cyco130/eslint-config": "^9.0.0",
     "@types/babel__core": "^7.20.5",
     "@types/babel__traverse": "^7.28.0",
     "@types/node": "^22.19.19",
