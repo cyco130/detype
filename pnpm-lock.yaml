@@ -47,18 +47,12 @@ importers:
       '@babel/traverse':
         specifier: ^7.29.0
         version: 7.29.0
-      '@vue/compiler-dom':
+      '@vue/compiler-core':
         specifier: ^3.5.34
         version: 3.5.34
       '@vue/compiler-sfc':
         specifier: ^3.5.34
         version: 3.5.34
-      '@vuedx/compiler-sfc':
-        specifier: 0.7.1
-        version: 0.7.1
-      '@vuedx/template-ast-types':
-        specifier: 0.7.1
-        version: 0.7.1
       fast-glob:
         specifier: ^3.3.3
         version: 3.3.3
@@ -1020,12 +1014,6 @@ packages:
   '@vue/shared@3.5.34':
     resolution: {integrity: sha512-24uqU4OIiX29ryC3MeWid/Xf2fa2EFRUVLb77nRhk+UrTVrh/XiGtFAFmJBAtBRbjwNdsPRP+jj/OL27Eg1NDA==}
 
-  '@vuedx/compiler-sfc@0.7.1':
-    resolution: {integrity: sha512-M+j3COLqmTFgtsDOJEeeijUFCk7FF8x7vQsdORPPxipZF1S2vPvlcLg1bKVE6NF4wh7Gaq9Wvwv0zPi87pWRVA==}
-
-  '@vuedx/template-ast-types@0.7.1':
-    resolution: {integrity: sha512-Mqugk/F0lFN2u9bhimH6G1kSu2hhLi2WoqgCVxrMvgxm2kDc30DtdvVGRq+UgEmKVP61OudcMtZqkUoGQeFBUQ==}
-
   acorn-jsx@5.3.2:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
     peerDependencies:
@@ -1775,10 +1763,6 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  lru-cache@6.0.0:
-    resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
-    engines: {node: '>=10'}
-
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
 
@@ -2091,10 +2075,6 @@ packages:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
     engines: {node: '>=0.10.0'}
 
-  source-map@0.6.1:
-    resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
-    engines: {node: '>=0.10.0'}
-
   stable-hash-x@0.2.0:
     resolution: {integrity: sha512-o3yWv49B/o4QZk5ZcsALc6t0+eCelPc44zZsLtCQnZPDwFpDYSWcDnrv2TtMmMbQ7uKo3J0HTURCqckw23czNQ==}
     engines: {node: '>=12.0.0'}
@@ -2393,9 +2373,6 @@ packages:
 
   yallist@3.1.1:
     resolution: {integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==}
-
-  yallist@4.0.0:
-    resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
 
   yaml@2.9.0:
     resolution: {integrity: sha512-2AvhNX3mb8zd6Zy7INTtSpl1F15HW6Wnqj0srWlkKLcpYl/gMIMJiyuGq2KeI2YFxUPjdlB+3Lc10seMLtL4cA==}
@@ -3250,16 +3227,6 @@ snapshots:
       '@vue/shared': 3.5.34
 
   '@vue/shared@3.5.34': {}
-
-  '@vuedx/compiler-sfc@0.7.1':
-    dependencies:
-      '@vue/compiler-core': 3.5.34
-      lru-cache: 6.0.0
-      source-map: 0.6.1
-
-  '@vuedx/template-ast-types@0.7.1':
-    dependencies:
-      '@vue/compiler-core': 3.5.34
 
   acorn-jsx@5.3.2(acorn@8.16.0):
     dependencies:
@@ -4155,10 +4122,6 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lru-cache@6.0.0:
-    dependencies:
-      yallist: 4.0.0
-
   magic-string@0.30.21:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
@@ -4528,8 +4491,6 @@ snapshots:
 
   source-map-js@1.2.1: {}
 
-  source-map@0.6.1: {}
-
   stable-hash-x@0.2.0: {}
 
   stackback@0.0.2: {}
@@ -4859,8 +4820,6 @@ snapshots:
       strip-ansi: 7.2.0
 
   yallist@3.1.1: {}
-
-  yallist@4.0.0: {}
 
   yaml@2.9.0:
     optional: true

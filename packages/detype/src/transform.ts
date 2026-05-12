@@ -5,17 +5,44 @@ import {
 import type { VisitNodeObject, Node } from "@babel/traverse";
 import { format } from "prettier";
 import {
+	compileScript,
 	parse as parseVueSfc,
 	type SFCTemplateBlock as VueSfcTemplateBlock,
 	type SFCScriptBlock as VueSfcScriptBlock,
-} from "@vuedx/compiler-sfc";
-import { compileScript } from "@vue/compiler-sfc";
+} from "@vue/compiler-sfc";
 import {
-	traverse as traverseVueAst,
-	isSimpleExpressionNode as isVueSimpleExpressionNode,
-	isComponentNode as isVueComponentNode,
-} from "@vuedx/template-ast-types";
+	ElementTypes as VueElementTypes,
+	NodeTypes as VueNodeTypes,
+	type RootNode as VueRootNode,
+} from "@vue/compiler-core";
 import type { PrettierOptions } from ".";
+
+function traverseVueAst(
+	root: VueRootNode,
+	visitor: { enter(node: unknown): void },
+): void {
+	const seen = new WeakSet<object>();
+	function walk(node: unknown): void {
+		if (
+			!node ||
+			typeof node !== "object" ||
+			typeof (node as { type?: unknown }).type !== "number"
+		) {
+			return;
+		}
+		if (seen.has(node)) return;
+		seen.add(node);
+		visitor.enter(node);
+		for (const value of Object.values(node)) {
+			if (Array.isArray(value)) {
+				for (const item of value) walk(item);
+			} else if (value && typeof value === "object") {
+				walk(value);
+			}
+		}
+	}
+	walk(root);
+}
 
 // @ts-expect-error: No typinggs needed
 import babelTs from "@babel/preset-typescript";
@@ -249,10 +276,20 @@ async function removeTypesFromVueSfcScript(
 
 		traverseVueAst(templateAst, {
 			enter(node) {
-				if (isVueSimpleExpressionNode(node) && !node.isStatic) {
-					expressions.add(`[${node.content}]`);
-				} else if (isVueComponentNode(node)) {
-					expressions.add(`[${node.tag}]`);
+				const n = node as {
+					type: number;
+					isStatic?: boolean;
+					content?: string;
+					tagType?: number;
+					tag?: string;
+				};
+				if (n.type === VueNodeTypes.SIMPLE_EXPRESSION && !n.isStatic) {
+					expressions.add(`[${n.content}]`);
+				} else if (
+					n.type === VueNodeTypes.ELEMENT &&
+					n.tagType === VueElementTypes.COMPONENT
+				) {
+					expressions.add(`[${n.tag}]`);
 				}
 			},
 		});
