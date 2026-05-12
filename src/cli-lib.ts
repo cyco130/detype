@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { removeMagicCommentsFromFile, transformFile } from "./transformFile";
+import { removeMagicCommentsFromFile, transformFile } from "./transformFile.ts";
 import fastGlob from "fast-glob";
 import pkg from "../package.json";
 

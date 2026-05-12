@@ -1,4 +1,4 @@
-import { cli } from "./cli-lib";
+import { cli } from "./cli-lib.ts";
 
 const args = process.argv.slice(2);
 cli(...args)

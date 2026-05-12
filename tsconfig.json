@@ -11,6 +11,7 @@
 		"noUncheckedIndexedAccess": true,
 
 		"module": "preserve",
+		"allowImportingTsExtensions": true,
 		"esModuleInterop": true,
 		"verbatimModuleSyntax": true,
 		"isolatedModules": true,

@@ -3,7 +3,7 @@ import {
 	transform,
 	processMagicComments,
 	removeMagicComments,
-} from "./transform";
+} from "./transform.ts";
 import fs from "node:fs";
 import path from "node:path";
 

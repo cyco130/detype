@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { removeMagicCommentsFromFile, transformFile } from "./transformFile";
+import { removeMagicCommentsFromFile, transformFile } from "./transformFile.ts";
 
 vi.mock("fs", () => ({
 	default: {
@@ -14,7 +14,7 @@ vi.mock("prettier", () => ({
 	resolveConfig: vi.fn().mockResolvedValue("mock prettier config"),
 }));
 
-vi.mock("./transform", () => ({
+vi.mock("./transform.ts", () => ({
 	transform: vi.fn().mockResolvedValue("transformed text"),
 	removeMagicComments: vi
 		.fn()
@@ -25,7 +25,7 @@ describe("transformFile function", () => {
 	it("transforms file", async () => {
 		const { readFile, writeFile } = (await import("node:fs")).default.promises;
 		const { resolveConfig } = await import("prettier");
-		const { transform } = await import("./transform");
+		const { transform } = await import("./transform.ts");
 
 		await transformFile("input.ts", "output.js");
 
@@ -49,7 +49,7 @@ describe("removeMagicCommentsFromFile function", () => {
 	it("removes magic comments", async () => {
 		const { readFile, writeFile } = (await import("node:fs")).default.promises;
 		const { resolveConfig } = await import("prettier");
-		const { removeMagicComments } = await import("./transform");
+		const { removeMagicComments } = await import("./transform.ts");
 
 		await removeMagicCommentsFromFile("input.ts", "output.ts");
 
