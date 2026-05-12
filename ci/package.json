@@ -1,0 +1,14 @@
+{
+  "name": "detype-ci",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "ci": "vitest --reporter=verbose run"
+  },
+  "dependencies": {
+    "@types/node": "^22.19.19",
+    "detype": "workspace:*",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.6"
+  }
+}

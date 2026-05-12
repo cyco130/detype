@@ -20,11 +20,11 @@ jobs:
         node_version: [24]
         include:
           - os: ubuntu-latest
-            node_version: 20
-          - os: ubuntu-latest
             node_version: 22
           - os: ubuntu-latest
             node_version: 25
+          - os: ubuntu-latest
+            node_version: 26
       fail-fast: false
     name: "CI tests on node-${{ matrix.node_version }}, ${{ matrix.os }}"
     steps:
@@ -34,12 +34,13 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v6
         with:
-          version: 10
+          version: 11
 
       - name: Set node version to ${{ matrix.node_version }}
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node_version }}
+          check-latest: true
           cache: "pnpm"
 
       - name: Install
@@ -49,4 +50,4 @@ jobs:
         run: pnpm run build
 
       - name: Run CI tests
-        run: pnpm run test:unit
+        run: pnpm run ci

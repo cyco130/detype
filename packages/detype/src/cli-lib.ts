@@ -25,7 +25,8 @@ export async function cli(...args: string[]): Promise<boolean> {
 		return false;
 	}
 
-	let [input, output] = params;
+	const [input] = params;
+	let output = params[1];
 
 	if (
 		params.length === 0 ||
@@ -52,10 +53,6 @@ export async function cli(...args: string[]): Promise<boolean> {
 		console.warn(
 			"--remove-ts-comments has no effect when --remove-magic-comments is used",
 		);
-	}
-
-	if (!removeMagic) {
-		[input, output] = args;
 	}
 
 	if (!input) {

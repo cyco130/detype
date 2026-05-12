@@ -1,0 +1,64 @@
+{
+  "name": "detype",
+  "version": "2.0.7",
+  "description": "Removes TypeScript type annotations but keeps the formatting",
+  "keywords": [
+    "typescript",
+    "formatting",
+    "vue",
+    "sfc"
+  ],
+  "author": "Fatih Aygün <cyco130@gmail.com>",
+  "license": "MIT",
+  "repository": "github:cyco130/detype",
+  "bugs": {
+    "url": "https://github.com/cyco130/detype/issues"
+  },
+  "homepage": "https://github.com/cyco130/detype#readme",
+  "bin": {
+    "detype": "./detype.js"
+  },
+  "files": [
+    "dist",
+    "detype.js"
+  ],
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsdown --clean",
+    "dev": "tsdown --watch",
+    "prepack": "pnpm build",
+    "test": "pnpm run /^test:/",
+    "test:typecheck": "tsc -p tsconfig.json --noEmit",
+    "test:lint": "eslint . --max-warnings 0",
+    "test:unit": "vitest run",
+    "test:package": "publint"
+  },
+  "dependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/preset-typescript": "^7.28.5",
+    "@babel/traverse": "^7.29.0",
+    "@vue/compiler-dom": "^3.5.34",
+    "@vue/compiler-sfc": "^3.5.34",
+    "@vuedx/compiler-sfc": "0.7.1",
+    "@vuedx/template-ast-types": "0.7.1",
+    "fast-glob": "^3.3.3",
+    "prettier": "^3.8.3"
+  },
+  "devDependencies": {
+    "@cyco130/eslint-config": "^8.0.0",
+    "@types/babel__core": "^7.20.5",
+    "@types/babel__traverse": "^7.28.0",
+    "@types/node": "^22.19.19",
+    "eslint": "^10.3.0",
+    "publint": "^0.3.20",
+    "tsdown": "^0.22.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.6"
+  },
+  "engines": {
+    "node": "22 || 24 || 25 || 26"
+  }
+}

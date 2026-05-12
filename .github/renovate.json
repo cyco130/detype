@@ -15,7 +15,7 @@
 			"enabled": false
 		},
 		{
-			"allowedVersions": "20",
+			"allowedVersions": "22",
 			"matchPackageNames": ["/^@types/node$/"]
 		}
 	],

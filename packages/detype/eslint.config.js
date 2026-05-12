@@ -4,7 +4,7 @@ import config from "@cyco130/eslint-config/node"; // or "@cyco130/eslint-config/
 export default [
 	...config,
 	{
-		ignores: ["dist/", "node_modules/"],
+		ignores: ["dist/", "node_modules/", "test-files/"],
 	},
 	{
 		languageOptions: {

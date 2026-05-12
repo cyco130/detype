@@ -22,13 +22,13 @@ let x: string;
 // This comment should be deleted
 // Ditto for this
 interface Foo {
-	// This should go too
-	bar: number;
+  // This should go too
+  bar: number;
 }
 
 // This comment should also be kept
 export function bar(foo: Foo): Date {
-	return new Date();
+  return new Date();
 }
 ```
 
@@ -41,7 +41,7 @@ let x;
 
 // This comment should also be kept
 export function bar(foo) {
-	return new Date();
+  return new Date();
 }
 ```
 
@@ -113,34 +113,34 @@ console.log("Hello from TypeScript");
 ```ts
 // Transform TypeScript code into vanilla JavaScript without affecting the formatting
 function transform(
-	// Source code
-	code: string,
-	// File name for the source
-	fileName: string,
-	// Options to pass to prettier
-	prettierOptions?: PrettierOptions | null,
+  // Source code
+  code: string,
+  // File name for the source
+  fileName: string,
+  // Options to pass to prettier
+  prettierOptions?: PrettierOptions | null,
 ): Promise<string>;
 
 // Transform the input file and write the output to another file
 function transformFile(
-	inputFileName: string,
-	outputFileName: string,
+  inputFileName: string,
+  outputFileName: string,
 ): Promise<void>;
 
 // Remove magic comments without performing the TS to JS transform
 export async function removeMagicComments(
-	// Source code
-	code: string,
-	// File name for the source
-	fileName: string,
-	// Options to pass to prettier
-	prettierOptions?: PrettierOptions | null,
+  // Source code
+  code: string,
+  // File name for the source
+  fileName: string,
+  // Options to pass to prettier
+  prettierOptions?: PrettierOptions | null,
 ): Promise<string>;
 
 // Remove magic comments from the input file and write the output to another file
 export async function removeMagicCommentsFromFile(
-	inputFileName: string,
-	outputFileName: string,
+  inputFileName: string,
+  outputFileName: string,
 ): Promise<void>;
 ```
 
