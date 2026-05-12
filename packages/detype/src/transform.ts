@@ -369,6 +369,8 @@ export async function removeMagicComments(
 	const WITH_COMMENT = "// @detype: with\n";
 	const END_COMMENT = "// @detype: end\n";
 
+	code = code.replaceAll("\r\n", "\n");
+
 	let start = code.indexOf(REPLACE_COMMENT);
 	let startEnd = start + REPLACE_COMMENT.length;
 
