@@ -1,5 +1,5 @@
 import { test, expect, beforeAll } from "vitest";
-import { execFileSync } from "node:child_process";
+import { execSync } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync, existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -38,7 +38,8 @@ function readOutput(path: string): string {
 }
 
 function runDetype(...args: string[]) {
-	execFileSync("pnpm", ["exec", "detype", ...args], { stdio: "inherit" });
+	const quoted = args.map((a) => JSON.stringify(a)).join(" ");
+	execSync(`pnpm exec detype ${quoted}`, { stdio: "inherit" });
 }
 
 test("CLI transforms TypeScript to JavaScript", () => {
