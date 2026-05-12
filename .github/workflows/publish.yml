@@ -37,9 +37,9 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v6
         with:
-          version: 10
+          version: 11
 
-      - name: Set Node version
+      - name: Set node version
         uses: actions/setup-node@v6
         with:
           node-version: 24
@@ -55,10 +55,10 @@ jobs:
           git config --global user.email "<>"
 
       - name: Bump version
-        run: "pnpm version ${{ github.event.inputs.version }} --no-git-tag-version"
+        run: "./version ${{ github.event.inputs.version }}"
 
       - name: "Publish to NPM"
-        run: pnpm -r publish --provenance --access public --no-git-checks --tag ${{ github.event.inputs.tag }}
+        run: pnpm -r publish --access public --no-git-checks --provenance --tag ${{ github.event.inputs.tag }}
 
       - name: "Commit version bump"
         if: ${{ github.event.inputs.commit == 'true' }}

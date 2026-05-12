@@ -2,6 +2,7 @@
 	"compilerOptions": {
 		"noEmit": true,
 
+		"allowJs": true,
 		"checkJs": true,
 		"forceConsistentCasingInFileNames": true,
 		"skipLibCheck": true,
@@ -16,11 +17,11 @@
 		"isolatedModules": true,
 		"moduleDetection": "force",
 		"resolveJsonModule": true,
+		"allowImportingTsExtensions": true,
 		"customConditions": ["import"],
 
 		"target": "es2022",
-		"lib": ["es2022"],
-		"types": ["node"]
+		"lib": ["es2022"]
 	},
 	"exclude": ["node_modules", "dist"]
 }

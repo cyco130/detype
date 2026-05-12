@@ -1,2 +1,4 @@
-node_modules
-dist
+**/.git
+**/node_modules
+**/dist
+pnpm-lock.yaml

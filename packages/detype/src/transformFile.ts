@@ -3,7 +3,7 @@ import {
 	transform,
 	removeMagicComments,
 	type RemoveTypeOptions,
-} from "./transform";
+} from "./transform.ts";
 import { resolveConfig } from "prettier";
 
 const { readFile, writeFile } = fs.promises;

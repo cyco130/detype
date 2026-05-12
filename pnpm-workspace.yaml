@@ -1,0 +1,11 @@
+strictPeerDependencies: false
+sideEffectsCache: false
+linkWorkspacePackages: true
+
+packages:
+  - packages/*
+  - ci
+
+allowBuilds:
+  esbuild: true
+  unrs-resolver: true
