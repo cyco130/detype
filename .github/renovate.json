@@ -8,6 +8,10 @@
 	"minimumReleaseAge": "1 day",
 	"packageRules": [
 		{
+			"matchPackageNames": ["@cyco130/eslint-config"],
+			"minimumReleaseAge": "0"
+		},
+		{
 			"matchManagers": ["github-actions"],
 			"rangeStrategy": "replace"
 		},
