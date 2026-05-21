@@ -1,6 +1,8 @@
 strictPeerDependencies: false
 sideEffectsCache: false
 linkWorkspacePackages: true
+minimumReleaseAgeExclude:
+  - "@cyco130/eslint-config"
 
 packages:
   - packages/*
