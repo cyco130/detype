@@ -46,15 +46,15 @@
     "prettier": "^3.8.3"
   },
   "devDependencies": {
-    "@cyco130/eslint-config": "^9.0.0",
+    "@cyco130/eslint-config": "^9.0.1",
     "@types/babel__core": "^7.20.5",
     "@types/babel__traverse": "^7.28.0",
     "@types/node": "^22.19.19",
-    "eslint": "^10.3.0",
-    "publint": "^0.3.20",
+    "eslint": "^10.4.0",
+    "publint": "^0.3.21",
     "tsdown": "^0.22.0",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.6"
+    "vitest": "^4.1.7"
   },
   "engines": {
     "node": "22 || 24 || 25 || 26"
