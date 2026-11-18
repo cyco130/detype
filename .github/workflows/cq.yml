@@ -17,20 +17,18 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node_version: [24]
+        node_version: [26]
       fail-fast: false
     name: "Code quality checks on node-${{ matrix.node_version }}, ${{ matrix.os }}"
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Install pnpm
         uses: pnpm/action-setup@v6
-        with:
-          version: 11
 
       - name: Set node version to ${{ matrix.node_version }}
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node_version }}
           check-latest: true
