@@ -21,7 +21,7 @@ These are deliberate. Don't change them without a reason.
 - **Strict TS** with `noUncheckedIndexedAccess` and `noImplicitOverride`. The package's [tsconfig.json](packages/detype/tsconfig.json) uses `module: "preserve"` with `customConditions: ["import"]` rather than `nodenext` — this is intentional and predates the nodenext convention; don't "fix" it without a reason.
 - **Relative imports use `.ts` extensions**, not `.js`. Lint enforces this; tsconfigs allow it via `allowImportingTsExtensions`. The point is that source runs natively under Node's TS support and Deno, no transpile step required.
 - **Tabs, 80 cols.** Markdown and `package.json` use 2-space indent (see [.prettierrc](.prettierrc)). Don't reformat with spaces.
-- **Node**: the published source in [packages/detype/src/](packages/detype/src/) targets the lowest `engines.node` major. The support range covers every active LTS and every Current release — there is often more than one of each (right now: 22 and 24 are LTS; 25 and 26 are Current). Dev tooling, build configs, and scripts (e.g. `tsdown.config.ts`) can assume the latest minor of the most recent LTS — features that landed in recent LTS minors are fair game there; Current-only features aren't. Off-limits inside the package `src/`.
+- **Node**: the published source in [packages/detype/src/](packages/detype/src/) targets the lowest `engines.node` major. The support range covers every active LTS and every Current release — there is often more than one of each (right now: 22, 24 and 26 are LTS; there is no Current release). Dev tooling, build configs, and scripts (e.g. `tsdown.config.ts`) can assume the latest minor of the most recent LTS — features that landed in recent LTS minors are fair game there; Current-only features aren't. Off-limits inside the package `src/`.
 - **ESLint config** comes from `@cyco130/eslint-config/node`. Lint rules live there, not in-repo.
 
 ## Library invariants
@@ -30,7 +30,7 @@ detype-specific design choices that look like bugs or dead code if you don't kno
 
 - **Output preserves formatting, not just types.** detype is not just `tsc --emit` or `babel`. It runs the source through Babel to strip TS annotations, then through Prettier to re-format. The whole reason the project exists is that naive type-stripping mangles whitespace and the result is unusable as a published JS counterpart to a TS source. Don't replace the Prettier pass with a "faster" string-rewrite — the formatting fidelity _is_ the product.
 - **Magic comments** (`@detype: replace` / `@detype: with` / `@detype: end`) let authors substitute a JS-only block for a TS-only block during transform. `transform` applies them; `removeMagicComments` strips them without performing the TS→JS transform. Both modes exist because some consumers want the comments cleaned out of their TS source after a refactor.
-- **Vue SFC support** uses `@vue/compiler-sfc` and the pinned `@vuedx/*` packages. The `@vuedx/*` deps are intentionally pinned (not Renovate-updated — see `ignoreDeps` in [.github/renovate.json](.github/renovate.json)); they're an abandoned upstream and bumping them has historically broken Vue parsing. Audit any change to Vue handling against the `input.vue` / `expected.vue` fixtures.
+- **Vue SFC support** uses `@vue/compiler-sfc` and `@vue/compiler-core`, with a small in-repo template AST walker in [transform.ts](packages/detype/src/transform.ts). Audit any change to Vue handling against the `input.vue` / `expected.vue` fixtures.
 - **`--remove-ts-comments`** strips `@ts-ignore` and `@ts-expect-error` because those have no meaning in the emitted JS. Off by default — turning it on is a destructive op the user has to ask for.
 - **CLI inference rules.** With one argument, `detype input.ts` infers `input.js`, `input.tsx` → `input.jsx`, `.vue` → `.vue` (overwrite refused unless `-m` is also passed). With a directory, the output dir is required. These shortcuts are documented in `--help`; don't tighten them without updating the help text.
 
@@ -60,5 +60,5 @@ There are also unit tests in [packages/detype/src/](packages/detype/src/) (`*.te
 ## Tooling around the edges
 
 - **husky + lint-staged** run on pre-commit. If a commit is being blocked, fix the underlying lint/format issue rather than bypassing the hook.
-- **Renovate** config lives at [.github/renovate.json](.github/renovate.json). `@vuedx/*` is in `ignoreDeps` on purpose — see Library invariants.
+- **Renovate** config lives at [.github/renovate.json](.github/renovate.json).
 - **VSCode** recommended extensions and settings live in [.vscode/](.vscode/).

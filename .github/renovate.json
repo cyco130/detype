@@ -22,6 +22,10 @@
 		{
 			"allowedVersions": "22",
 			"matchPackageNames": ["/^@types/node$/"]
+		},
+		{
+			"allowedVersions": "<7",
+			"matchPackageNames": ["typescript"]
 		}
 	],
 	"ignoreDeps": []

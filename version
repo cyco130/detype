@@ -1,10 +1,20 @@
 #!/bin/bash
-WHITE='\033[1;37m'
-GREEN='\033[0;32m'
-BLUE='\033[1;34m'
-NC='\033[0m'
+set -e
 
-echo -e ${WHITE}Updating package versions${NC}
-pnpm -r --filter=./packages/* exec -- bash -c "echo -e ${BLUE@Q}\$PNPM_PACKAGE_NAME${NC@Q}@${GREEN@Q}\`npm version --allow-same-version --no-git-tag-version $@\`${NC@Q}"
+# Exported so the per-package shell below can read them from the environment
+# instead of having them quoted into its command string.
+export WHITE='\033[1;37m'
+export GREEN='\033[0;32m'
+export BLUE='\033[1;34m'
+export NC='\033[0m'
+
+printf '%b\n' "${WHITE}Updating package versions${NC}"
+# The inner script is single-quoted (nothing expands here) and the arguments
+# are forwarded as its positional parameters, so this works in any POSIX shell.
+pnpm -r --filter='./packages/*' exec -- sh -c '
+	version=$(npm version --allow-same-version --no-git-tag-version "$@") || exit 1
+	printf "%b\n" "${BLUE}${PNPM_PACKAGE_NAME}${NC}@${GREEN}${version}${NC}"
+' sh "$@"
+
 # Reinstall to update lockfile
 pnpm i --no-frozen-lockfile

@@ -51,7 +51,7 @@ The output is very close to hand-written JavaScript, especially if you were alre
 
 There are lots of tools for transpiling TypeScript into plain JavaScript (`tsc`, `babel`, `swc`, `esbuild`, `sucrase` etc.) but none of them is perfectly suitable for this specific use case. Most of them don't preserve the formatting at all. `sucrase` comes close, but it doesn't remove comments attached to TypeScript-only constructs.
 
-`detype` uses [Babel](https://babeljs.io/), a small Babel plugin to remove comments attached to TypeScript-only constructs, and [Prettier](https://prettier.io/) under the hood. For Vue files, it also uses the tools from the [VueDX project](https://github.com/vuedx/languagetools).
+`detype` uses [Babel](https://babeljs.io/), a small Babel plugin to remove comments attached to TypeScript-only constructs, and [Prettier](https://prettier.io/) under the hood. For Vue files, it also uses the official Vue compiler packages (`@vue/compiler-sfc` and `@vue/compiler-core`).
 
 ## Magic comments
 
